@@ -3,6 +3,8 @@ $directory\
 [ ](fg:#88C0D0 bg:#1d2230)\
 $git_branch\
 $git_status\
+$aws\
+$kubernetes\
 [ ](fg:#1d2230)\
 \n$status$character
 """
@@ -52,6 +54,10 @@ format = '[ $path ]($style)[$read_only]($read_only_style)'
 "Downloads" = " "
 "Music" = " "
 "Pictures" = " "
+"environments" = "󰒔 enviroments"
+"dev"  = "🟢 dev"
+"stg"  = "🟡 stg"
+"prod" = "🔴 prod"
 
 [git_branch]
 symbol = ""
@@ -70,7 +76,7 @@ format = "[$duration]($style)" # nf-pl-right_soft_divider, nf-mdi-clock
 [time]
 disabled = false
 time_format = "%R" # Hour:Minute Format
-# style = "bg:#1d2230"
+style = "bg:#1d2230"
 format = '[[   $time ](fg:#a0a9cb)]($style)'
 
 [character]
@@ -82,13 +88,9 @@ symbol = "⎈ "
 format = "[$symbol$context( \\($namespace\\))]($style) "
 style = "fg:#7aa2f7"
 
-[terraform]
-disabled = false
-format = "[󱁢 tf]($style) "
-style = "fg:#9ece6a"
-
 [aws]
 disabled = false
 format = "[ $profile]($style) "
-style = "fg:#e0af68"
+style = "bold fg:#e0af68"
+
 

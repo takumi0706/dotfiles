@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(yarn:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(nvm:*)",
+      "Bash(git:*)",
+      "Bash(docker:*)",
+      "Bash(docker-compose:*)",
+      "Bash(curl:*)",
+      "Bash(terraform:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(wc:*)",
+      "Bash(echo:*)",
+      "Bash(mkdir:*)",
+      "Bash(timeout:*)",
+      "Bash(lsof:*)",
+      "Bash(kill:*)",
+      "Bash(export:*)",
+      "Bash(source:*)",
+      "Bash(bash:*)",
+      "Bash(sed:*)",
+      "Bash(awk:*)",
+      "Bash(xargs:*)",
+      "Bash(tflint:*)",
+      "Bash(dig:*)",
+      "Bash(nslookup:*)",
+      "Bash(openssl:*)",
+      "Bash(python3:*)",
+      "Bash(pip3:*)",
+      "Bash(act:*)",
+      "Read(**/*)",
+      "Edit(**/*.{ts,tsx,js,jsx,json,md,yaml,yml,css,scss,html,tf,sh,py})",
+      "Write(**/*.{ts,tsx,js,jsx,json,md,yaml,yml,css,scss,html,tf,sh,py})",
+      "WebFetch(domain:*)",
+      "WebSearch",
+      "mcp__linear__*",
+      "mcp__context7__*",
+      "mcp__terraform__*",
+      "mcp__brave-search__*",
+      "mcp__memory__*",
+      "mcp__sequential-thinking__*",
+      "mcp__serena__*",
+      "mcp__chrome-devtools__*",
+      "Skill(frontend-design)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "WebFetch(domain:otel.cloud.redocly.com)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(**/secrets/**)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/*credentials*)",
+      "Edit(.env)",
+      "Edit(**/secrets/**)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(terraform apply:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)"
+    ],
+    "defaultMode": "default"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bun x ccusage statusline"
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-code-plugins": true,
+    "commit-commands@claude-code-plugins": true
+  },
+  "feedbackSurveyState": {
+    "lastShownTime": 1754137712092
+  },
+  "web_research": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/hooks/gh-confirm.py"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -18,6 +18,7 @@ link_to_homedir() {
   if [[ "$HOME" != "$dotdir" ]];then
     for f in $dotdir/.??*; do
       [[ `basename $f` == ".git" ]] && continue
+      [[ `basename $f` == ".claude" ]] && continue
       if [[ -L "$HOME/`basename $f`" ]];then
         command rm -f "$HOME/`basename $f`"
       fi
@@ -28,6 +29,55 @@ link_to_homedir() {
     done
   else
     command echo "same install src dest"
+  fi
+}
+
+link_claude_config() {
+  command echo "linking claude config..."
+
+  local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+  local dotdir=$(dirname ${script_dir})
+
+  # ~/.claudeディレクトリがなければ作成
+  if [ ! -d "$HOME/.claude" ]; then
+    command mkdir -p "$HOME/.claude"
+  fi
+
+  # hooksディレクトリがなければ作成
+  if [ ! -d "$HOME/.claude/hooks" ]; then
+    command mkdir -p "$HOME/.claude/hooks"
+  fi
+
+  # 個別ファイルをシンボリックリンク
+  for f in "$dotdir/.claude/CLAUDE.md" "$dotdir/.claude/settings.json"; do
+    if [ -f "$f" ]; then
+      local basename=$(basename "$f")
+      # 既存ファイルをバックアップ
+      if [ -e "$HOME/.claude/$basename" ] && [ ! -L "$HOME/.claude/$basename" ]; then
+        command mv "$HOME/.claude/$basename" "$HOME/.dotbackup/"
+      fi
+      # 既存シンボリックリンクを削除
+      if [ -L "$HOME/.claude/$basename" ]; then
+        command rm -f "$HOME/.claude/$basename"
+      fi
+      command ln -snf "$f" "$HOME/.claude/$basename"
+    fi
+  done
+
+  # hooksディレクトリ内のファイルをシンボリックリンク
+  if [ -d "$dotdir/.claude/hooks" ]; then
+    for f in "$dotdir/.claude/hooks/"*; do
+      if [ -f "$f" ]; then
+        local basename=$(basename "$f")
+        if [ -L "$HOME/.claude/hooks/$basename" ]; then
+          command rm -f "$HOME/.claude/hooks/$basename"
+        fi
+        if [ -e "$HOME/.claude/hooks/$basename" ] && [ ! -L "$HOME/.claude/hooks/$basename" ]; then
+          command mv "$HOME/.claude/hooks/$basename" "$HOME/.dotbackup/"
+        fi
+        command ln -snf "$f" "$HOME/.claude/hooks/$basename"
+      fi
+    done
   fi
 }
 
@@ -47,6 +97,7 @@ while [ $# -gt 0 ];do
 done
 
 link_to_homedir
+link_claude_config
 git config --global include.path "~/.gitconfig_shared"
 command echo -e "\e[1;36m Install completed!!!! \e[m"
 

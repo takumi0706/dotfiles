@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Run ShellCheck
-        run: shellcheck -x -e SC1090,SC1091 .bin/install.sh .zshrc
+        run: shellcheck -x -S error .bin/install.sh .zshrc
 
   stylua:
     name: StyLua

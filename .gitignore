@@ -59,6 +59,9 @@
 !/.xsessionrc
 !/.config/
 !/.config/**
+# Exclude local/sensitive config files
+/.config/cagent/
+/.config/gh/hosts.yml
 !/.gitignore_global
 !/.gitconfig_shared
 
@@ -67,6 +70,8 @@
 !/.claude/settings.json
 !/.claude/hooks/
 !/.claude/hooks/**
+# Exclude local settings (machine-specific)
+/.claude/settings.local.json
 
 !/README.md
 !/LICENSE

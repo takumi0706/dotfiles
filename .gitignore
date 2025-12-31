@@ -70,6 +70,7 @@
 !/.claude/settings.json
 !/.claude/hooks/
 !/.claude/hooks/**
+/.claude/hooks/__pycache__/
 !/.claude/skills/
 !/.claude/skills/**
 # Exclude local settings (machine-specific)

@@ -1,0 +1,51 @@
+name: Install Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.bin/install.sh'
+      - '.github/workflows/install-test.yml'
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 9 * * 1' # 毎週月曜 18:00 JST
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Install (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-14 # Sonoma
+          - macos-15 # Sequoia
+          - ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup test environment
+        run: |
+          TEST_HOME="${{ runner.temp }}/test-home"
+          mkdir -p "$TEST_HOME"
+          echo "TEST_HOME=$TEST_HOME" >> $GITHUB_ENV
+
+      - name: Run install.sh
+        run: HOME="$TEST_HOME" bash .bin/install.sh
+
+      - name: Verify symlinks
+        run: |
+          echo "=== Symlinks created ==="
+          ls -la "$TEST_HOME" | grep "^l" || echo "No symlinks found"
+          echo ""
+          echo "=== .config contents ==="
+          ls -la "$TEST_HOME/.config" 2>/dev/null || echo "No .config directory"
+          echo ""
+          echo "=== .dotbackup contents ==="
+          ls -la "$TEST_HOME/.dotbackup" 2>/dev/null || echo "No backup directory"

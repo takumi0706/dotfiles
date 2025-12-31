@@ -81,4 +81,3 @@ config.key_tables = require("keybinds").key_tables
 config.leader = { key = "q", mods = "CTRL", timeout_milliseconds = 2000 }
 
 return config
-

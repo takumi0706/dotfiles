@@ -1,5 +1,9 @@
-# !/usr/bin/env bash
+#!/usr/bin/env bash
 set -ue
+
+is_ci() {
+  [ "${CI:-}" = "true" ] || [ "${GITHUB_ACTIONS:-}" = "true" ]
+}
 
 helpmsg() {
   command echo "Usage: $0 [--help | -h]" 0>&2
@@ -98,6 +102,10 @@ done
 
 link_to_homedir
 link_claude_config
-git config --global include.path "~/.gitconfig_shared"
+
+if ! is_ci; then
+  git config --global include.path "~/.gitconfig_shared"
+fi
+
 command echo -e "\e[1;36m Install completed!!!! \e[m"
 

@@ -4,7 +4,7 @@ $directory\
 $git_branch\
 $git_status\
 [ ](fg:#1d2230)\
-\n$character
+\n$status$character
 """
 
 right_format = """
@@ -16,6 +16,11 @@ $time
 
 # コマンドラインに1行分のスペースを入れる
 add_newline = true
+
+[status]
+disabled = false
+format = "[$status]($style) "
+style = "bold fg:#f7768e"
 
 [username]
 style_user = "white bold"
@@ -48,11 +53,6 @@ format = '[ $path ]($style)[$read_only]($read_only_style)'
 "Music" = " "
 "Pictures" = " "
 
-[aws]
-disabled = true
-[gcloud]
-disabled = true
-
 [git_branch]
 symbol = ""
 style = "bg:#1d2230"
@@ -75,4 +75,20 @@ format = '[[   $time ](fg:#a0a9cb)]($style)'
 
 [character]
 vimcmd_symbol = '[V](bold green) '
+
+[kubernetes]
+disabled = false
+symbol = "⎈ "
+format = "[$symbol$context( \\($namespace\\))]($style) "
+style = "fg:#7aa2f7"
+
+[terraform]
+disabled = false
+format = "[󱁢 tf]($style) "
+style = "fg:#9ece6a"
+
+[aws]
+disabled = false
+format = "[ $profile]($style) "
+style = "fg:#e0af68"
 

@@ -14,3 +14,5 @@ alias claude="/Users/takumi0706/.claude/local/claude"
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 . "$HOME/.local/bin/env"
+eval "$(starship init zsh)"
+

@@ -92,6 +92,17 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/hooks/doc-audit-check.py",
+            "timeout": 10000
+          }
+        ]
+      }
     ]
   }
 }

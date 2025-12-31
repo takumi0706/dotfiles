@@ -70,6 +70,8 @@
 !/.claude/settings.json
 !/.claude/hooks/
 !/.claude/hooks/**
+!/.claude/skills/
+!/.claude/skills/**
 # Exclude local settings (machine-specific)
 /.claude/settings.local.json
 

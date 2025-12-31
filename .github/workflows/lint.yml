@@ -1,0 +1,68 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 9 * * 1' # 毎週月曜 18:00 JST
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Run ShellCheck
+        run: shellcheck .bin/install.sh .zshrc
+
+  stylua:
+    name: StyLua
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: JohnnyMorganz/stylua-action@5a78f893c27d5de8a24f0d2329c4fbafdd5d0e90 # v4.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.20.0
+          args: --check .config/wezterm/
+
+  taplo:
+    name: Taplo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install Taplo
+        run: |
+          curl -fsSL https://github.com/tamasfe/taplo/releases/download/0.9.3/taplo-full-linux-x86_64.gz \
+            | gunzip > taplo && chmod +x taplo
+          sudo mv taplo /usr/local/bin/
+      - name: Check TOML
+        run: taplo check .config/starship.toml
+
+  ruff:
+    name: Ruff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: astral-sh/ruff-action@f14634c415d3c530a7ac5ba9df8bb04c4f3a18ed # v3
+        with:
+          args: check .claude/hooks/
+
+  json:
+    name: JSON Validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Validate JSON files
+        run: |
+          for f in .claude/settings.json .claude/settings.local.json; do
+            if [ -f "$f" ]; then
+              echo "Validating $f"
+              jq empty "$f" && echo "$f: valid"
+            fi
+          done

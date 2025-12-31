@@ -61,6 +61,12 @@
 !/.gitignore_global
 !/.gitconfig_shared
 
+!/.claude/
+!/.claude/CLAUDE.md
+!/.claude/settings.json
+!/.claude/hooks/
+!/.claude/hooks/**
+
 !/README.md
 !/LICENSE
 !.gitignore

@@ -38,11 +38,16 @@ config.show_new_tab_button_in_tab_bar = false
 -- タブの閉じるボタンを非表示
 config.show_close_tab_button_in_tabs = false
 
--- タブ同士の境界線を非表示
+-- タブ同士の境界線を非表示、背景を透過
 config.colors = {
   tab_bar = {
+    background = "rgba(0,0,0,0)",
     inactive_tab_edge = "none",
   },
+  cursor_bg = "#cba6f7",
+  cursor_fg = "#1e1e2e",
+  cursor_border = "#cba6f7",
+  compose_cursor = "#f38ba8",
 }
 
 -- タブの形をカスタマイズ

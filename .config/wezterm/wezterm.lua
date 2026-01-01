@@ -38,11 +38,16 @@ config.show_new_tab_button_in_tab_bar = false
 -- タブの閉じるボタンを非表示
 config.show_close_tab_button_in_tabs = false
 
--- タブ同士の境界線を非表示
+-- タブ同士の境界線を非表示、背景を透過
 config.colors = {
   tab_bar = {
+    background = "rgba(0,0,0,0)",
     inactive_tab_edge = "none",
   },
+  cursor_bg = "#cba6f7",
+  cursor_fg = "#1e1e2e",
+  cursor_border = "#cba6f7",
+  compose_cursor = "#f38ba8",
 }
 
 -- タブの形をカスタマイズ
@@ -72,6 +77,42 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
     { Foreground = { Color = edge_foreground } },
     { Text = SOLID_RIGHT_ARROW },
   }
+end)
+
+----------------------------------------------------
+-- ステータスバー
+----------------------------------------------------
+wezterm.on("update-status", function(window, pane)
+  local battery = ""
+  for _, b in ipairs(wezterm.battery_info()) do
+    local icon = ""
+    if b.state == "Charging" then
+      icon = wezterm.nerdfonts.md_battery_charging
+    elseif b.state_of_charge >= 0.8 then
+      icon = wezterm.nerdfonts.md_battery_high
+    elseif b.state_of_charge >= 0.4 then
+      icon = wezterm.nerdfonts.md_battery_medium
+    else
+      icon = wezterm.nerdfonts.md_battery_low
+    end
+    battery = icon .. " " .. string.format("%.0f%%", b.state_of_charge * 100)
+  end
+
+  local date = wezterm.strftime("%m/%d %H:%M")
+
+  local leader = ""
+  if window:leader_is_active() then
+    leader = "LEADER  "
+  end
+
+  window:set_right_status(wezterm.format({
+    { Foreground = { Color = "#f38ba8" } },
+    { Text = leader },
+    { Foreground = { Color = "#a6e3a1" } },
+    { Text = battery .. "  " },
+    { Foreground = { Color = "#89b4fa" } },
+    { Text = date .. " " },
+  }))
 end)
 
 ----------------------------------------------------

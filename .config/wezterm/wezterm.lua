@@ -75,6 +75,42 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 end)
 
 ----------------------------------------------------
+-- ステータスバー
+----------------------------------------------------
+wezterm.on("update-status", function(window, pane)
+  local battery = ""
+  for _, b in ipairs(wezterm.battery_info()) do
+    local icon = ""
+    if b.state == "Charging" then
+      icon = wezterm.nerdfonts.md_battery_charging
+    elseif b.state_of_charge >= 0.8 then
+      icon = wezterm.nerdfonts.md_battery_high
+    elseif b.state_of_charge >= 0.4 then
+      icon = wezterm.nerdfonts.md_battery_medium
+    else
+      icon = wezterm.nerdfonts.md_battery_low
+    end
+    battery = icon .. " " .. string.format("%.0f%%", b.state_of_charge * 100)
+  end
+
+  local date = wezterm.strftime("%m/%d %H:%M")
+
+  local leader = ""
+  if window:leader_is_active() then
+    leader = "LEADER  "
+  end
+
+  window:set_right_status(wezterm.format({
+    { Foreground = { Color = "#f38ba8" } },
+    { Text = leader },
+    { Foreground = { Color = "#a6e3a1" } },
+    { Text = battery .. "  " },
+    { Foreground = { Color = "#89b4fa" } },
+    { Text = date .. " " },
+  }))
+end)
+
+----------------------------------------------------
 -- keybinds
 ----------------------------------------------------
 config.disable_default_key_bindings = true

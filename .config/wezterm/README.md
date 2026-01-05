@@ -7,11 +7,13 @@
   ---
   Workspace関連
 
-  | キー               | 動作                          |
-  |--------------------|-------------------------------|
-  | Leader + w         | Workspace一覧を表示・切り替え |
-  | Leader + $         | Workspaceの名前変更           |
-  | Leader + Shift + W | 新規Workspace作成             |
+  | キー               | 動作                                    |
+  |--------------------|-----------------------------------------|
+  | Leader + w         | Workspace一覧を表示・切り替え（Fuzzy検索） |
+  | Leader + $         | Workspaceの名前変更                     |
+  | Leader + Shift + W | 新規Workspace作成                       |
+  | Leader + n         | 次のWorkspaceに移動                     |
+  | Leader + p         | 前のWorkspaceに移動                     |
 
   タブ操作
 

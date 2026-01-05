@@ -16,7 +16,7 @@ return {
       -- workspaceの切り替え
       key = "w",
       mods = "LEADER",
-      action = act.ShowLauncherArgs({ flags = "WORKSPACES", title = "Select workspace" }),
+      action = act.ShowLauncherArgs({ flags = "FUZZY|WORKSPACES", title = "Select workspace" }),
     },
     {
       --workspaceの名前変更
@@ -48,6 +48,10 @@ return {
         end),
       }),
     },
+    -- 次のWorkspaceに移動
+    { key = "n", mods = "LEADER", action = act.SwitchWorkspaceRelative(1) },
+    -- 前のWorkspaceに移動
+    { key = "p", mods = "LEADER", action = act.SwitchWorkspaceRelative(-1) },
     -- コマンドパレット表示
     { key = "p", mods = "SUPER", action = act.ActivateCommandPalette },
     -- Tab移動

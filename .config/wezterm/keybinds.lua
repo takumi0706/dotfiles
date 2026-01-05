@@ -48,6 +48,10 @@ return {
         end),
       }),
     },
+    -- 次のWorkspaceに移動
+    { key = "n", mods = "LEADER", action = act.SwitchWorkspaceRelative(1) },
+    -- 前のWorkspaceに移動
+    { key = "p", mods = "LEADER", action = act.SwitchWorkspaceRelative(-1) },
     -- コマンドパレット表示
     { key = "p", mods = "SUPER", action = act.ActivateCommandPalette },
     -- Tab移動

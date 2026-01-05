@@ -116,6 +116,15 @@ wezterm.on("update-status", function(window, pane)
 end)
 
 ----------------------------------------------------
+-- notifications
+----------------------------------------------------
+wezterm.on('bell', function(window, pane)
+  window:toast_notification('Claude Code', 'Task completed', nil, 4000)
+end)
+
+config.audible_bell = 'SystemBeep'  -- 音も鳴らす場合
+
+----------------------------------------------------
 -- keybinds
 ----------------------------------------------------
 config.disable_default_key_bindings = true

@@ -16,7 +16,7 @@ return {
       -- workspaceの切り替え
       key = "w",
       mods = "LEADER",
-      action = act.ShowLauncherArgs({ flags = "WORKSPACES", title = "Select workspace" }),
+      action = act.ShowLauncherArgs({ flags = "FUZZY|WORKSPACES", title = "Select workspace" }),
     },
     {
       --workspaceの名前変更

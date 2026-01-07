@@ -52,19 +52,19 @@ return {
       -- 補完用のcapabilities
       local capabilities = cmp_nvim_lsp.default_capabilities()
 
-      -- 診断アイコン
-      local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-      for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-      end
-
-      -- 診断設定
+      -- 診断設定（Neovim 0.10+ 新API）
       vim.diagnostic.config({
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = " ",
+            [vim.diagnostic.severity.WARN] = " ",
+            [vim.diagnostic.severity.HINT] = "󰠠 ",
+            [vim.diagnostic.severity.INFO] = " ",
+          },
+        },
         virtual_text = {
           prefix = "●",
         },
-        signs = true,
         update_in_insert = false,
         underline = true,
         severity_sort = true,

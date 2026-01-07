@@ -6,7 +6,7 @@ lint-shell:
 	shellcheck .bin/install.sh .zshrc
 
 lint-lua:
-	stylua --check .config/wezterm/
+	stylua --check .config/wezterm/ .config/nvim/
 
 lint-toml:
 	taplo check .config/starship.toml

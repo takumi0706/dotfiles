@@ -62,6 +62,10 @@
 # Exclude local/sensitive config files
 /.config/cagent/
 /.config/gh/hosts.yml
+# Neovim generated files
+/.config/nvim/lazy-lock.json
+/.config/nvim/plugin/
+/.config/nvim/.luarc.json
 !/.gitignore_global
 !/.gitconfig_shared
 

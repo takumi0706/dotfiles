@@ -69,18 +69,6 @@
     ],
     "defaultMode": "default"
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bun x ccusage statusline"
-  },
-  "enabledPlugins": {
-    "frontend-design@claude-code-plugins": true,
-    "commit-commands@claude-code-plugins": true
-  },
-  "feedbackSurveyState": {
-    "lastShownTime": 1754137712092
-  },
-  "web_research": true,
   "hooks": {
     "PreToolUse": [
       {
@@ -105,5 +93,19 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bun x ccusage statusline"
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-code-plugins": true,
+    "commit-commands@claude-code-plugins": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "feature-dev@claude-code-plugins": true
+  },
+  "feedbackSurveyState": {
+    "lastShownTime": 1754137712092
+  },
+  "web_research": true
 }

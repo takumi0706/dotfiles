@@ -102,7 +102,8 @@
     "frontend-design@claude-code-plugins": true,
     "commit-commands@claude-code-plugins": true,
     "typescript-lsp@claude-plugins-official": true,
-    "feature-dev@claude-code-plugins": true
+    "feature-dev@claude-code-plugins": true,
+    "context7@claude-plugins-official": true
   },
   "feedbackSurveyState": {
     "lastShownTime": 1754137712092

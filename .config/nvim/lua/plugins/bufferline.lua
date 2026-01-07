@@ -7,6 +7,13 @@ return {
     version = "*",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     event = "VeryLazy",
+    init = function()
+      -- catppuccin bufferline統合の互換性パッチ（get→get_theme問題対応）
+      local ok, bufline = pcall(require, "catppuccin.groups.integrations.bufferline")
+      if ok and bufline and not bufline.get then
+        bufline.get = bufline.get_theme
+      end
+    end,
     keys = {
       { "<leader>bp", "<cmd>BufferLineTogglePin<CR>", desc = "ピン留め切り替え" },
       { "<leader>bP", "<cmd>BufferLineGroupClose ungrouped<CR>", desc = "ピン留め以外を閉じる" },

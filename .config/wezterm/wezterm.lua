@@ -118,8 +118,8 @@ end)
 ----------------------------------------------------
 -- notifications
 ----------------------------------------------------
--- OSC通知の表示条件: バックグラウンドペインからのみ表示
-config.notification_handling = "SuppressFromFocusedPane"
+-- OSC通知の表示条件: 常に表示
+config.notification_handling = "AlwaysShow"
 
 wezterm.on("bell", function(window, pane)
   window:toast_notification("Claude Code", "Task completed", nil, 4000)

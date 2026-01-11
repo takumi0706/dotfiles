@@ -38,16 +38,18 @@ fi
 TIMESTAMP=$(date +"%H:%M")
 
 # イベントに応じたタイトルとメッセージを生成
+# Note: terminal-notifierは「[」で始まるメッセージを正しく処理できないため
+# メッセージの形式を変更
 if [ "$HOOK_EVENT" = "stop" ]; then
-    TITLE="Claude Code - Task Completed"
-    BODY="[$PROJECT] タスクが完了しました ($TIMESTAMP)"
+    TITLE="Claude Code"
+    BODY="Task Completed: $PROJECT ($TIMESTAMP)"
     SOUND="Tink"
 elif [ "$HOOK_EVENT" = "notification" ]; then
-    TITLE="Claude Code - Input Required"
+    TITLE="Claude Code"
     if echo "$MESSAGE" | grep -qi "permission"; then
-        BODY="[$PROJECT] 権限の確認が必要です ($TIMESTAMP)"
+        BODY="Permission Required: $PROJECT ($TIMESTAMP)"
     else
-        BODY="[$PROJECT] 入力待ちです ($TIMESTAMP)"
+        BODY="Input Required: $PROJECT ($TIMESTAMP)"
     fi
     SOUND="Glass"
 else
@@ -58,9 +60,15 @@ fi
 printf '\033]9;%s: %s\007' "$TITLE" "$BODY"
 printf '\033]777;notify;%s;%s\007' "$TITLE" "$BODY"
 
-# terminal-notifierで通知（フォールバック）
+# 音を鳴らす
+SOUND_FILE="/System/Library/Sounds/${SOUND}.aiff"
+if [ -f "$SOUND_FILE" ]; then
+    afplay "$SOUND_FILE" &
+fi
+
+# terminal-notifierで通知
 if command -v terminal-notifier &> /dev/null; then
-    terminal-notifier -title "$TITLE" -message "$BODY" -sound "$SOUND" &
+    exec /opt/homebrew/bin/terminal-notifier -title "$TITLE" -message "$BODY" < /dev/null 2>/dev/null
 fi
 
 exit 0

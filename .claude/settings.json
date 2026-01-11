@@ -98,7 +98,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ~/.claude/hooks/notify.py",
+            "command": "bash ~/.claude/hooks/notify.sh",
             "timeout": 5000
           }
         ]
@@ -109,7 +109,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ~/.claude/hooks/notify.py",
+            "command": "bash ~/.claude/hooks/notify.sh",
             "timeout": 5000
           }
         ]

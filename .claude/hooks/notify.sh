@@ -66,9 +66,13 @@ if [ -f "$SOUND_FILE" ]; then
     afplay "$SOUND_FILE" &
 fi
 
-# terminal-notifierで通知
+# terminal-notifierで通知（クリックでWezTermをアクティベート）
 if command -v terminal-notifier &> /dev/null; then
-    exec /opt/homebrew/bin/terminal-notifier -title "$TITLE" -message "$BODY" < /dev/null 2>/dev/null
+    exec /opt/homebrew/bin/terminal-notifier \
+        -title "$TITLE" \
+        -message "$BODY" \
+        -activate "com.github.wez.wezterm" \
+        < /dev/null 2>/dev/null
 fi
 
 exit 0

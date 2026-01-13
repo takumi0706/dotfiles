@@ -46,7 +46,6 @@ return {
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
-      local lspconfig = require("lspconfig")
       local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
       -- 補完用のcapabilities
@@ -119,10 +118,14 @@ return {
         )
       end
 
-      -- TypeScript/JavaScript
-      lspconfig.ts_ls.setup({
+      -- 共通設定（Neovim 0.11+ vim.lsp.config API）
+      vim.lsp.config("*", {
         capabilities = capabilities,
         on_attach = on_attach,
+      })
+
+      -- TypeScript/JavaScript
+      vim.lsp.config("ts_ls", {
         settings = {
           typescript = {
             inlayHints = {
@@ -144,9 +147,7 @@ return {
       })
 
       -- Lua（Neovim設定用）
-      lspconfig.lua_ls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
+      vim.lsp.config("lua_ls", {
         settings = {
           Lua = {
             runtime = {
@@ -166,27 +167,8 @@ return {
         },
       })
 
-      -- JSON
-      lspconfig.jsonls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-      })
-
-      -- HTML
-      lspconfig.html.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-      })
-
-      -- CSS
-      lspconfig.cssls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-      })
-
-      -- ESLint
-      lspconfig.eslint.setup({
-        capabilities = capabilities,
+      -- ESLint（カスタムon_attach）
+      vim.lsp.config("eslint", {
         on_attach = function(client, bufnr)
           on_attach(client, bufnr)
           -- 保存時に自動修正
@@ -196,6 +178,9 @@ return {
           })
         end,
       })
+
+      -- すべてのLSPサーバーを有効化
+      vim.lsp.enable({ "ts_ls", "lua_ls", "jsonls", "html", "cssls", "eslint" })
     end,
   },
 }

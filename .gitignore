@@ -62,6 +62,8 @@
 # Exclude local/sensitive config files
 /.config/cagent/
 /.config/gh/hosts.yml
+# Raycast - use Raycast Cloud Sync or Export/Import instead
+/.config/raycast/
 # Neovim generated files
 /.config/nvim/lazy-lock.json
 /.config/nvim/plugin/

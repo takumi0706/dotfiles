@@ -125,6 +125,9 @@ _yarn_workspace_scripts() {
   local workspace_name="$1"
   local root_dir
 
+  # Require jq for JSON parsing
+  command -v jq &>/dev/null || return 1
+
   # Find yarn project root
   root_dir=$(pwd)
   while [[ "$root_dir" != "/" ]]; do
@@ -136,22 +139,20 @@ _yarn_workspace_scripts() {
   # Find workspace package.json
   local pkg_json=""
 
-  # Check workspaces in root package.json
+  # Get workspace patterns from root package.json
   if [[ -f "$root_dir/package.json" ]]; then
-    # Try to find workspace directory
-    local workspace_dirs
-    workspace_dirs=$(grep -o '"workspaces"[[:space:]]*:[[:space:]]*\[[^]]*\]' "$root_dir/package.json" 2>/dev/null | \
-      grep -oE '"[^"]*"' | tr -d '"' | grep -v "workspaces")
+    local workspace_patterns
+    workspace_patterns=$(jq -r '.workspaces // [] | .[]' "$root_dir/package.json" 2>/dev/null)
 
-    for pattern in $workspace_dirs; do
+    for pattern in $workspace_patterns; do
       # Handle glob patterns like "packages/*" or "apps/*"
       local base_dir="${pattern%/\*}"
+      base_dir="${base_dir%\*}"
       if [[ -d "$root_dir/$base_dir" ]]; then
         for dir in "$root_dir/$base_dir"/*/; do
           if [[ -f "${dir}package.json" ]]; then
             local name
-            name=$(grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' "${dir}package.json" 2>/dev/null | \
-              head -1 | sed 's/.*"name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+            name=$(jq -r '.name // ""' "${dir}package.json" 2>/dev/null)
             if [[ "$name" == "$workspace_name" ]]; then
               pkg_json="${dir}package.json"
               break 2
@@ -164,11 +165,8 @@ _yarn_workspace_scripts() {
 
   [[ -z "$pkg_json" || ! -f "$pkg_json" ]] && return 1
 
-  # Extract scripts from package.json
-  grep -o '"scripts"[[:space:]]*:[[:space:]]*{[^}]*}' "$pkg_json" 2>/dev/null | \
-    grep -oE '"[a-zA-Z0-9:_-]+"[[:space:]]*:' | \
-    sed 's/"//g; s/[[:space:]]*://' | \
-    grep -v "^scripts$"
+  # Extract scripts using jq
+  jq -r '.scripts // {} | keys[]' "$pkg_json" 2>/dev/null
 }
 
 # Custom completion wrapper for yarn workspace scripts

@@ -130,26 +130,25 @@ _setup_pnpm_completion() {
 
 # Override Tab key to initialize completions on first use
 _lazy_completion() {
-  # Remove this widget after first run
-  zle -D _lazy_completion 2>/dev/null
-
-  # Initialize completion system
+  # Initialize completion system (only runs once due to flag)
   _init_completion
 
   # Setup package manager completions
   _setup_npm_completion
   _setup_pnpm_completion
 
-  # Bind normal Tab behavior
-  zle -N expand-or-complete
+  # Rebind Tab to standard completion widget
+  bindkey '^I' expand-or-complete
 
-  # Execute the original Tab action
+  # Execute the completion action
   zle expand-or-complete
 }
 
-# Bind lazy loading to Tab key
-zle -N _lazy_completion
-bindkey '^I' _lazy_completion
+# Only setup lazy loading in interactive shells with zle
+if [[ -o interactive ]] && zle; then
+  zle -N _lazy_completion
+  bindkey '^I' _lazy_completion
+fi
 
 # -----------------------------------------------------------------------------
 # Helper Functions (Available Immediately)

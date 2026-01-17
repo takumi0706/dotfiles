@@ -171,11 +171,8 @@ _yarn_workspace_scripts() {
     grep -v "^scripts$"
 }
 
-# Custom completion for yarn workspace command
-_yarn_workspace_complete() {
-  local curcontext="$curcontext" state line
-  typeset -A opt_args
-
+# Custom completion wrapper for yarn workspace scripts
+_yarn_with_workspace_scripts() {
   # Check if we're completing after "yarn workspace <name>"
   if [[ ${#words[@]} -ge 4 && "${words[2]}" == "workspace" ]]; then
     local workspace_name="${words[3]}"
@@ -189,14 +186,16 @@ _yarn_workspace_complete() {
     fi
   fi
 
-  # Fall back to default yarn completion
-  return 1
+  # Fall back to original _yarn completion
+  _yarn "$@"
 }
 
-# Hook into yarn completion
+# Hook into yarn completion (preserve original)
 _setup_yarn_workspace_completion() {
-  # Add our custom completer for yarn
-  compdef _yarn_workspace_complete yarn 2>/dev/null || true
+  # Only set up if _yarn exists
+  if (( $+functions[_yarn] )); then
+    compdef _yarn_with_workspace_scripts yarn 2>/dev/null || true
+  fi
 }
 
 # -----------------------------------------------------------------------------

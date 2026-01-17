@@ -23,16 +23,11 @@ fi
 FPATH="$HOME/.local/share/zsh/completions:$FPATH"
 
 # -----------------------------------------------------------------------------
-# Completion System Initialization (Lazy Loading)
+# Completion System Initialization
 # -----------------------------------------------------------------------------
-
-# Flag to track if compinit has been run
-typeset -g _completions_initialized=0
 
 # Initialize completion system
 _init_completion() {
-  (( _completions_initialized )) && return
-
   # Load completion system
   autoload -Uz compinit
 
@@ -49,8 +44,6 @@ _init_completion() {
   else
     compinit -C -d "$zcompdump"
   fi
-
-  _completions_initialized=1
 
   # Apply completion styles after compinit
   _setup_completion_styles
@@ -125,30 +118,13 @@ _setup_pnpm_completion() {
 }
 
 # -----------------------------------------------------------------------------
-# Lazy Loading Trigger
+# Initialize Completions
 # -----------------------------------------------------------------------------
 
-# Override Tab key to initialize completions on first use
-_lazy_completion() {
-  # Initialize completion system (only runs once due to flag)
-  _init_completion
-
-  # Setup package manager completions
-  _setup_npm_completion
-  _setup_pnpm_completion
-
-  # Rebind Tab to standard completion widget
-  bindkey '^I' expand-or-complete
-
-  # Execute the completion action
-  zle expand-or-complete
-}
-
-# Only setup lazy loading in interactive shells with zle
-if [[ -o interactive ]] && zle; then
-  zle -N _lazy_completion
-  bindkey '^I' _lazy_completion
-fi
+# Run initialization immediately
+_init_completion
+_setup_npm_completion
+_setup_pnpm_completion
 
 # -----------------------------------------------------------------------------
 # Helper Functions (Available Immediately)

@@ -118,6 +118,88 @@ _setup_pnpm_completion() {
 }
 
 # -----------------------------------------------------------------------------
+# Yarn Workspace Scripts Completion (for yarn v4+)
+# -----------------------------------------------------------------------------
+
+_yarn_workspace_scripts() {
+  local workspace_name="$1"
+  local root_dir
+
+  # Find yarn project root
+  root_dir=$(pwd)
+  while [[ "$root_dir" != "/" ]]; do
+    [[ -f "$root_dir/yarn.lock" ]] && break
+    root_dir=$(dirname "$root_dir")
+  done
+  [[ "$root_dir" == "/" ]] && return 1
+
+  # Find workspace package.json
+  local pkg_json=""
+
+  # Check workspaces in root package.json
+  if [[ -f "$root_dir/package.json" ]]; then
+    # Try to find workspace directory
+    local workspace_dirs
+    workspace_dirs=$(grep -o '"workspaces"[[:space:]]*:[[:space:]]*\[[^]]*\]' "$root_dir/package.json" 2>/dev/null | \
+      grep -oE '"[^"]*"' | tr -d '"' | grep -v "workspaces")
+
+    for pattern in $workspace_dirs; do
+      # Handle glob patterns like "packages/*" or "apps/*"
+      local base_dir="${pattern%/\*}"
+      if [[ -d "$root_dir/$base_dir" ]]; then
+        for dir in "$root_dir/$base_dir"/*/; do
+          if [[ -f "${dir}package.json" ]]; then
+            local name
+            name=$(grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' "${dir}package.json" 2>/dev/null | \
+              head -1 | sed 's/.*"name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+            if [[ "$name" == "$workspace_name" ]]; then
+              pkg_json="${dir}package.json"
+              break 2
+            fi
+          fi
+        done
+      fi
+    done
+  fi
+
+  [[ -z "$pkg_json" || ! -f "$pkg_json" ]] && return 1
+
+  # Extract scripts from package.json
+  grep -o '"scripts"[[:space:]]*:[[:space:]]*{[^}]*}' "$pkg_json" 2>/dev/null | \
+    grep -oE '"[a-zA-Z0-9:_-]+"[[:space:]]*:' | \
+    sed 's/"//g; s/[[:space:]]*://' | \
+    grep -v "^scripts$"
+}
+
+# Custom completion for yarn workspace command
+_yarn_workspace_complete() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  # Check if we're completing after "yarn workspace <name>"
+  if [[ ${#words[@]} -ge 4 && "${words[2]}" == "workspace" ]]; then
+    local workspace_name="${words[3]}"
+    local scripts
+    scripts=$(_yarn_workspace_scripts "$workspace_name" 2>/dev/null)
+
+    if [[ -n "$scripts" ]]; then
+      local -a script_list
+      script_list=(${(f)scripts})
+      _describe -t scripts 'workspace scripts' script_list && return 0
+    fi
+  fi
+
+  # Fall back to default yarn completion
+  return 1
+}
+
+# Hook into yarn completion
+_setup_yarn_workspace_completion() {
+  # Add our custom completer for yarn
+  compdef _yarn_workspace_complete yarn 2>/dev/null || true
+}
+
+# -----------------------------------------------------------------------------
 # Initialize Completions
 # -----------------------------------------------------------------------------
 
@@ -125,6 +207,7 @@ _setup_pnpm_completion() {
 _init_completion
 _setup_npm_completion
 _setup_pnpm_completion
+_setup_yarn_workspace_completion
 
 # -----------------------------------------------------------------------------
 # Helper Functions (Available Immediately)

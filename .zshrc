@@ -14,5 +14,12 @@ alias claude="/Users/takumi0706/.claude/local/claude"
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 . "$HOME/.local/bin/env"
+
+# Package manager completions (npm/yarn/pnpm)
+[[ -f "$HOME/.config/zsh/completions.zsh" ]] && source "$HOME/.config/zsh/completions.zsh"
+
+# fzf integration
+[[ -f "$HOME/.config/zsh/fzf.zsh" ]] && source "$HOME/.config/zsh/fzf.zsh"
+
 eval "$(starship init zsh)"
 

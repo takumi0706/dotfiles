@@ -141,14 +141,17 @@ _yarn_workspace_scripts() {
 
   # Get workspace patterns from root package.json
   if [[ -f "$root_dir/package.json" ]]; then
-    local workspace_patterns
-    workspace_patterns=$(jq -r '.workspaces // [] | .[]' "$root_dir/package.json" 2>/dev/null)
+    local -a workspace_patterns
+    workspace_patterns=("${(@f)$(jq -r '.workspaces // [] | .[]' "$root_dir/package.json" 2>/dev/null)}")
 
-    for pattern in $workspace_patterns; do
+    local pattern
+    for pattern in "${workspace_patterns[@]}"; do
+      [[ -z "$pattern" ]] && continue
       # Handle glob patterns like "packages/*" or "apps/*"
-      local base_dir="${pattern%/\*}"
-      base_dir="${base_dir%\*}"
+      local base_dir="${pattern%\*}"
+      base_dir="${base_dir%/}"
       if [[ -d "$root_dir/$base_dir" ]]; then
+        local dir
         for dir in "$root_dir/$base_dir"/*/; do
           if [[ -f "${dir}package.json" ]]; then
             local name

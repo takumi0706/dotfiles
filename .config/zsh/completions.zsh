@@ -175,6 +175,7 @@ _yarn_workspace_scripts() {
 # Custom completion wrapper for yarn workspace scripts
 _yarn_with_workspace_scripts() {
   # Check if we're completing after "yarn workspace <name>"
+  # words[1]=yarn, words[2]=workspace, words[3]=<name>, words[4]=<script>
   if [[ ${#words[@]} -ge 4 && "${words[2]}" == "workspace" ]]; then
     local workspace_name="${words[3]}"
     local scripts
@@ -183,7 +184,8 @@ _yarn_with_workspace_scripts() {
     if [[ -n "$scripts" ]]; then
       local -a script_list
       script_list=(${(f)scripts})
-      _describe -t scripts 'workspace scripts' script_list && return 0
+      _describe -t scripts 'workspace scripts' script_list
+      return 0
     fi
   fi
 

@@ -16,8 +16,8 @@ return {
       render_modes = { "n", "c" },
       heading = {
         enabled = true,
-        sign = true,
-        icons = { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },
+        sign = false,
+        icons = { "# ", "## ", "### ", "#### ", "##### ", "###### " },
       },
       code = {
         enabled = true,
@@ -34,8 +34,8 @@ return {
       },
       checkbox = {
         enabled = true,
-        unchecked = { icon = "󰄱 " },
-        checked = { icon = "󰱒 " },
+        unchecked = { icon = "⬜ " },
+        checked = { icon = "✅ " },
       },
       quote = {
         enabled = true,
@@ -73,7 +73,7 @@ return {
       vim.fn["mkdp#util#install"]()
     end,
     init = function()
-      vim.g.mkdp_auto_start = 1
+      vim.g.mkdp_auto_start = 0
       vim.g.mkdp_auto_close = 1
       vim.g.mkdp_refresh_slow = 0
       vim.g.mkdp_command_for_global = 0
@@ -98,14 +98,16 @@ return {
   {
     "3rd/image.nvim",
     ft = { "markdown" },
+    build = false, -- luarocks ビルドをスキップ
     opts = {
+      processor = "magick_cli", -- CLI モードを使用（luarocks 不要）
       backend = "kitty",
       integrations = {
         markdown = {
           enabled = true,
           clear_in_insert_mode = true,
           download_remote_images = true,
-          only_render_image_at_cursor = true,
+          only_render_image_at_cursor = false,
           filetypes = { "markdown" },
         },
       },
@@ -152,14 +154,7 @@ return {
     },
     keys = {
       { "<leader>mdl", "<cmd>MDToc<CR>", desc = "TOC リスト表示", ft = "markdown" },
-      {
-        "<leader>mdx",
-        function()
-          require("markdown").toggle_checkbox()
-        end,
-        desc = "チェックボックストグル",
-        ft = "markdown",
-      },
+      { "<leader>mdx", "<cmd>MDTaskToggle<CR>", desc = "チェックボックストグル", ft = "markdown" },
       {
         "<leader>mda",
         function()

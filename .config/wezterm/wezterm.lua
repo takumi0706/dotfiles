@@ -2,6 +2,7 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
 config.automatically_reload_config = true
+config.enable_kitty_graphics = true -- image.nvim 用
 config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.font_size = 12.5
 config.use_ime = true

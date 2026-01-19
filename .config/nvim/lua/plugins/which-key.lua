@@ -23,6 +23,7 @@ return {
         { "<leader>g", group = "Git" },
         { "<leader>gt", group = "Git切り替え" },
         { "<leader>l", group = "LSP" },
+        { "<leader>md", group = "Markdown", icon = "" },
         { "<leader>s", group = "分割" },
         { "<leader>t", group = "テーマ/切り替え" },
         { "<leader>w", group = "保存", icon = "" },

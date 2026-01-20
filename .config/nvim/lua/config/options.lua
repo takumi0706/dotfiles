@@ -2,6 +2,29 @@
 
 local opt = vim.opt
 
+-- nvm経由のNode.jsツール（mmdc等）をPATHに追加
+-- diagram.nvimがMermaidを描画するために必要
+local function add_nvm_to_path()
+  local home = os.getenv("HOME")
+  local nvm_versions_dir = home .. "/.nvm/versions/node"
+  local handle = io.popen("ls -1 " .. nvm_versions_dir .. " 2>/dev/null")
+  if handle then
+    local result = handle:read("*a")
+    handle:close()
+    for version in result:gmatch("[^\n]+") do
+      local bin_path = nvm_versions_dir .. "/" .. version .. "/bin"
+      local mmdc_path = bin_path .. "/mmdc"
+      local f = io.open(mmdc_path, "r")
+      if f then
+        f:close()
+        vim.env.PATH = bin_path .. ":" .. vim.env.PATH
+        return
+      end
+    end
+  end
+end
+add_nvm_to_path()
+
 -- リーダーキー (Space)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "

@@ -27,6 +27,9 @@ return {
         left_pad = 2,
         right_pad = 2,
         border = "thin",
+        language_pad = 0,
+        -- diagram.nvimが処理するコードブロックを除外
+        disable_background = { "mermaid", "plantuml", "d2" },
       },
       bullet = {
         enabled = true,
@@ -94,20 +97,20 @@ return {
   },
 
   -- image.nvim: 画像プレビュー
-  -- Wezterm (Kitty Graphics Protocol) 対応
+  -- Wezterm Sixel バックエンド対応
   {
     "3rd/image.nvim",
     ft = { "markdown" },
     build = false, -- luarocks ビルドをスキップ
     opts = {
       processor = "magick_cli", -- CLI モードを使用（luarocks 不要）
-      backend = "kitty",
+      backend = "sixel", -- Wezterm では Sixel を使用（Kitty は非互換）
       integrations = {
         markdown = {
           enabled = true,
           clear_in_insert_mode = true,
           download_remote_images = true,
-          only_render_image_at_cursor = false,
+          only_render_image_at_cursor = true, -- パフォーマンス最適化
           filetypes = { "markdown" },
         },
       },
@@ -118,6 +121,34 @@ return {
       window_overlap_clear_enabled = true,
       window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
     },
+  },
+
+  -- diagram.nvim: Neovim内図表描画
+  -- Mermaid/PlantUML/D2 対応（image.nvim連携）
+  {
+    "3rd/diagram.nvim",
+    ft = { "markdown" },
+    dependencies = {
+      "3rd/image.nvim",
+    },
+    config = function()
+      require("diagram").setup({
+        integrations = {
+          require("diagram.integrations.markdown"),
+        },
+        renderer_options = {
+          mermaid = {
+            background = nil, -- mmdcのデフォルト
+            theme = "dark",
+            scale = 2, -- 拡大して見やすく
+          },
+        },
+      })
+      -- 遅延ロード後にイベントを再発火（初回ロード時の対策）
+      vim.defer_fn(function()
+        vim.cmd("doautocmd BufWinEnter")
+      end, 100)
+    end,
   },
 
   -- markdown-toc.nvim: TOC 生成

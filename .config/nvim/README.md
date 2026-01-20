@@ -8,9 +8,13 @@
 - JetBrainsMono Nerd Font（WezTermで設定済み）
 - ripgrep, fd（Telescope用）
 - lazygit（Git UI用）
+- mmdc（Mermaid CLI、オプション - Neovim内Mermaid描画用）
 
 ```bash
 brew install neovim ripgrep fd lazygit
+
+# Mermaid描画を使う場合（オプション）
+npm install -g @mermaid-js/mermaid-cli
 ```
 
 ## Quick Start
@@ -386,12 +390,23 @@ Markdown ファイルを開くと自動的に以下の機能が有効になり�
 | `<Space>mdF` | テーブル自動整形 |
 | `<Space>mda` | 選択テキストにリンク追加（Visual モード） |
 
+### Mermaid ダイアグラム描画
+
+Neovim内でMermaidダイアグラムを直接描画できます（要mmdc）。
+
+| キー/コマンド | 機能 |
+|---------------|------|
+| `:lua require("diagram").show_diagram_hover()` | カーソル位置のダイアグラムを表示 |
+
+コードブロック内（` ```mermaid `の中）にカーソルを置いて実行してください。
+
 ### 自動機能
 
 - Normal モード: リッチな装飾表示（見出し背景色、アイコン等）
 - Insert モード: raw テキスト表示（編集しやすい）
 - テーブル: 入力時に自動整形
 - 画像: カーソル位置の画像をインライン表示（Wezterm 必須）
+- Mermaid: コードブロック内でダイアグラムをインライン描画（要mmdc）
 
 ## Troubleshooting
 

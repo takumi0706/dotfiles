@@ -105,6 +105,7 @@ return {
     opts = {
       processor = "magick_cli", -- CLI モードを使用（luarocks 不要）
       backend = "sixel", -- Wezterm では Sixel を使用（Kitty は非互換）
+      scale_factor = 1.5, -- インライン表示を1.5倍に拡大
       integrations = {
         markdown = {
           enabled = true,
@@ -114,10 +115,10 @@ return {
           filetypes = { "markdown" },
         },
       },
-      max_width = 100,
-      max_height = 20,
-      max_height_window_percentage = 50,
-      max_width_window_percentage = nil,
+      max_width = nil, -- 制限なし
+      max_height = nil, -- 制限なし
+      max_height_window_percentage = 100,
+      max_width_window_percentage = 100,
       window_overlap_clear_enabled = true,
       window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
     },
@@ -138,17 +139,115 @@ return {
         },
         renderer_options = {
           mermaid = {
-            background = nil, -- mmdcのデフォルト
+            background = "#1e1e2e", -- Catppuccin Mocha の背景色
             theme = "dark",
-            scale = 2, -- 拡大して見やすく
+            scale = 2, -- 軽量化
+            width = 800, -- 軽量化
+            height = 600,
           },
         },
       })
-      -- 遅延ロード後にイベントを再発火（初回ロード時の対策）
       vim.defer_fn(function()
         vim.cmd("doautocmd BufWinEnter")
       end, 100)
     end,
+    keys = {
+      {
+        "<leader>mdm",
+        function()
+          -- カーソル位置のMermaidコードブロックを取得してシステムビューアで開く
+          local markdown_integration = require("diagram.integrations.markdown")
+
+          -- コードブロック全体の範囲を取得するヘルパー関数
+          local function get_extended_range(bufnr, diagram)
+            local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+            local start_row = diagram.range.start_row
+            local end_row = diagram.range.end_row
+
+            for i = start_row, 0, -1 do
+              local line = lines[i + 1]
+              if line and line:match("^%s*```") then
+                start_row = i
+                break
+              end
+            end
+
+            for i = end_row, #lines - 1 do
+              local line = lines[i + 1]
+              if line and line:match("^%s*```%s*$") then
+                end_row = i
+                break
+              end
+            end
+
+            return { start_row = start_row, end_row = end_row }
+          end
+
+          -- カーソル位置のダイアグラムを検出
+          local bufnr = vim.api.nvim_get_current_buf()
+          local diagrams = markdown_integration.query_buffer_diagrams(bufnr)
+          local cursor_line = vim.api.nvim_win_get_cursor(0)[1] - 1
+
+          local target_diagram = nil
+          for _, diagram in ipairs(diagrams) do
+            local extended = get_extended_range(bufnr, diagram)
+            if cursor_line >= extended.start_row and cursor_line <= extended.end_row then
+              target_diagram = diagram
+              break
+            end
+          end
+
+          if not target_diagram then
+            vim.notify("カーソル位置にダイアグラムがありません", vim.log.levels.WARN)
+            return
+          end
+
+          if target_diagram.renderer_id ~= "mermaid" then
+            vim.notify("Mermaidダイアグラムではありません: " .. target_diagram.renderer_id, vim.log.levels.WARN)
+            return
+          end
+
+          vim.notify("Mermaid描画中（高解像度）...", vim.log.levels.INFO)
+
+          -- 直接 mmdc を実行（キャッシュをバイパス）
+          local tmp_input = vim.fn.tempname() .. ".mmd"
+          local tmp_output = vim.fn.tempname() .. ".png"
+
+          -- ソースを一時ファイルに書き込み
+          local f = io.open(tmp_input, "w")
+          if not f then
+            vim.notify("一時ファイルの作成に失敗しました", vim.log.levels.ERROR)
+            return
+          end
+          f:write(target_diagram.source)
+          f:close()
+
+          -- mmdc を最高解像度で実行（vim.fn.jobstart で PATH を正しく継承）
+          local cmd = string.format(
+            "mmdc -i %s -o %s -b '#1e1e2e' -t dark -s 10 --width 2560 --height 1440",
+            vim.fn.shellescape(tmp_input),
+            vim.fn.shellescape(tmp_output)
+          )
+
+          vim.fn.jobstart(cmd, {
+            on_exit = function(_, exit_code)
+              -- 一時入力ファイルを削除
+              os.remove(tmp_input)
+
+              -- システムビューアで開く
+              if exit_code == 0 and vim.fn.filereadable(tmp_output) == 1 then
+                vim.ui.open(tmp_output)
+                vim.notify("システムビューアで開きました", vim.log.levels.INFO)
+              else
+                vim.notify("レンダリングに失敗しました", vim.log.levels.ERROR)
+              end
+            end,
+          })
+        end,
+        desc = "Mermaid描画（システムビューア）",
+        ft = "markdown",
+      },
+    },
   },
 
   -- markdown-toc.nvim: TOC 生成

@@ -53,11 +53,9 @@
       "WebFetch(domain:otel.cloud.redocly.com)"
     ],
     "deny": [
-      "Read(.env)",
       "Read(**/secrets/**)",
       "Read(**/*.pem)",
       "Read(**/*.key)",
-      "Read(**/*credentials*)",
       "Edit(.env)",
       "Edit(**/secrets/**)",
       "Bash(rm -rf /)",

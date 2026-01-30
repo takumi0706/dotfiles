@@ -6,7 +6,7 @@ config.enable_kitty_graphics = true -- image.nvim 用
 config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.font_size = 12.5
 config.use_ime = true
-config.window_background_opacity = 0.75
+config.window_background_opacity = 0.45
 config.macos_window_background_blur = 20
 config.color_scheme = "Catppuccin Mocha"
 

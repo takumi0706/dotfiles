@@ -124,11 +124,12 @@
     "feature-dev@claude-code-plugins": true,
     "context7@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "slack@claude-plugins-official": true
   },
+  "language": "日本語",
   "feedbackSurveyState": {
     "lastShownTime": 1754137712092
   },
-  "web_research": true,
-  "language": "日本語"
+  "web_research": true
 }

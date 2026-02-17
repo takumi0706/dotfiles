@@ -3,7 +3,7 @@
 lint: lint-shell lint-lua lint-toml lint-python lint-json
 
 lint-shell:
-	shellcheck .bin/install.sh .zshrc
+	shellcheck .bin/install.sh .zshrc .config/zsh/ide.zsh
 
 lint-lua:
 	stylua --check .config/wezterm/ .config/nvim/

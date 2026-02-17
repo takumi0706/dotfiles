@@ -1,5 +1,6 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
+local ide = require("ide_layout")
 
 -- Show which key table is active in the status area
 wezterm.on("update-right-status", function(window, pane)
@@ -115,6 +116,58 @@ return {
       key = "a",
       mods = "LEADER",
       action = act.ActivateKeyTable({ name = "activate_pane", timeout_milliseconds = 1000 }),
+    },
+
+    ----------------------------------------------------
+    -- IDE モード
+    ----------------------------------------------------
+    -- IDE起動
+    {
+      key = "i",
+      mods = "LEADER",
+      action = wezterm.action_callback(function(window, pane)
+        ide.create_ide_layout(window, pane, nil)
+      end),
+    },
+    -- 下パネルトグル
+    {
+      key = "`",
+      mods = "LEADER",
+      action = wezterm.action_callback(function(window, pane)
+        ide.toggle_bottom(window, pane)
+      end),
+    },
+    -- フォーカスモード(Zoom)
+    {
+      key = "f",
+      mods = "LEADER",
+      action = wezterm.action_callback(function(window, pane)
+        ide.toggle_focus_mode(window, pane)
+      end),
+    },
+    -- 下パネルツール循環切り替え
+    {
+      key = "Tab",
+      mods = "LEADER",
+      action = wezterm.action_callback(function(window, pane)
+        ide.cycle_bottom_tool(window, pane)
+      end),
+    },
+    -- 下パネル→ターミナル
+    {
+      key = "1",
+      mods = "LEADER",
+      action = wezterm.action_callback(function(window, pane)
+        ide.switch_bottom_tool(window, pane, "terminal")
+      end),
+    },
+    -- 下パネル→lazygit
+    {
+      key = "2",
+      mods = "LEADER",
+      action = wezterm.action_callback(function(window, pane)
+        ide.switch_bottom_tool(window, pane, "lazygit")
+      end),
     },
   },
   -- キーテーブル

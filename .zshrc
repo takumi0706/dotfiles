@@ -20,5 +20,8 @@ export PATH="/Library/TeX/texbin:$PATH"
 # fzf integration
 [[ -f "$HOME/.config/zsh/fzf.zsh" ]] && source "$HOME/.config/zsh/fzf.zsh"
 
+# IDE function (WezTerm IDE layout)
+[[ -f "$HOME/.config/zsh/ide.zsh" ]] && source "$HOME/.config/zsh/ide.zsh"
+
 eval "$(starship init zsh)"
 

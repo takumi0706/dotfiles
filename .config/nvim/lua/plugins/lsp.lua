@@ -124,6 +124,9 @@ return {
 
       -- TypeScript/JavaScript
       vim.lsp.config("ts_ls", {
+        init_options = {
+          locale = "ja",
+        },
         settings = {
           typescript = {
             inlayHints = {

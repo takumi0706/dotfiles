@@ -61,9 +61,7 @@ return {
             [vim.diagnostic.severity.INFO] = " ",
           },
         },
-        virtual_text = {
-          prefix = "●",
-        },
+        virtual_text = false, -- tiny-inline-diagnostic.nvimで表示
         update_in_insert = false,
         underline = true,
         severity_sort = true,

@@ -49,6 +49,7 @@
       "mcp__serena__*",
       "mcp__chrome-devtools__*",
       "Skill(frontend-design)",
+      "Skill(bounded-context)",
       "WebFetch(domain:registry.npmjs.org)",
       "WebFetch(domain:otel.cloud.redocly.com)"
     ],
@@ -125,9 +126,11 @@
     "context7@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
-    "slack@claude-plugins-official": true
+    "playwright@claude-plugins-official": true,
+    "coderabbit@claude-plugins-official": true
   },
   "language": "日本語",
+  "skipDangerousModePermissionPrompt": false,
   "feedbackSurveyState": {
     "lastShownTime": 1754137712092
   },

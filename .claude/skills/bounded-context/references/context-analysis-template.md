@@ -1,7 +1,7 @@
-# コンテキスト分析テンプレート
+# Context Analysis Template
 
-> このテンプレートを使って各境界付けられたコンテキストの分析結果を記録する。
-> `<project>/docs/ddd/contexts/<context-name>.md` として保存すること。
+> Use this template to record the analysis results for each bounded context.
+> Save as `<project>/docs/ddd/contexts/<context-name>.md`.
 
 ---
 
@@ -62,8 +62,8 @@
 
 ### このコンテキスト特有の用語の使われ方
 
-> ここに、このコンテキストで用語がどのような「ゲーム」の中で使われるかを記述する。
-> 他のコンテキストと同じ用語でも意味が異なる場合は、その違いを明記する。
+> Describe how terms are used in the specific "game" of this context.
+> If the same term has different meanings in other contexts, document the differences.
 
 ```
 用語「___」について:
@@ -74,5 +74,5 @@
 
 ### 境界の根拠
 
-> なぜこの範囲がひとつのコンテキストとして切り出されたかの根拠を記述する。
-> アクターの目的、ルールの一貫性、用語の意味の統一性の観点から説明する。
+> Document why this scope was carved out as a single context.
+> Explain from the perspectives of actor purposes, rule consistency, and term semantic coherence.

@@ -1,157 +1,157 @@
-# 言語ゲーム概念と分析手法ガイド
+# Language Game Concepts and Analysis Method Guide
 
-## ヴィトゲンシュタインの言語ゲーム
+## Wittgenstein's Language Games
 
-### 核心概念
+### Core Concept
 
-ルートヴィヒ・ヴィトゲンシュタインは後期の主著『哲学探究』で、言語の意味についての見方を根本的に転換した。
+In his later work *Philosophical Investigations*, Ludwig Wittgenstein fundamentally shifted the view on the meaning of language.
 
-**前期（『論理哲学論考』）:** 言語は世界を「写像」する → 語には固定された意味がある
-**後期（『哲学探究』）:** 語の意味とは言語におけるその**使用**である（第43節）
+**Early period (*Tractatus Logico-Philosophicus*):** Language "pictures" the world → words have fixed meanings
+**Later period (*Philosophical Investigations*):** The meaning of a word is its **use** in the language (§43)
 
 > "Die Bedeutung eines Wortes ist sein Gebrauch in der Sprache."
-> （語の意味とは、言語におけるその使用である）
+> (The meaning of a word is its use in the language.)
 
-### 言語ゲームとは
+### What Are Language Games?
 
-- 言葉の使用は「ゲーム」のようなもの：参加者、ルール、目的がある
-- 同じ言葉でも、異なるゲーム（文脈）では異なるルールで使われる
-- ゲームのルールは事前に定義されるのではなく、実践の中で形成される
-- 「家族的類似性」：すべてのゲームに共通する本質はない。類似点のネットワークがあるだけ
+- The use of words is like a "game": there are participants, rules, and purposes
+- The same word operates under different rules in different games (contexts)
+- Game rules are not defined in advance but formed through practice
+- "Family resemblance": there is no common essence to all games — only a network of similarities
 
-### 重要な示唆
+### Key Implications
 
-1. **意味は辞書にはない:** 辞書的定義ではなく、実際の使用場面を観察せよ
-2. **文脈が意味を決定する:** 同じ語でも異なる「ゲーム」では異なる意味を持つ
-3. **ルールは実践から生まれる:** トップダウンの定義より、ボトムアップの観察が重要
+1. **Meaning is not in the dictionary:** Observe actual usage, not dictionary definitions
+2. **Context determines meaning:** The same word has different meanings in different "games"
+3. **Rules emerge from practice:** Bottom-up observation matters more than top-down definitions
 
 ---
 
-## ソフトウェア設計への応用
+## Application to Software Design
 
-### なぜ言語ゲームがDDDに有効か
+### Why Language Games Are Effective for DDD
 
-DDDの中心概念「ユビキタス言語」は、コンテキスト内で一貫した用語を使うことを求める。
-しかし、**どこでコンテキストを区切るか**の判断基準が曖昧になりがちである。
+DDD's core concept "Ubiquitous Language" requires consistent terminology within a context.
+However, the criteria for **where to draw context boundaries** tend to be ambiguous.
 
-言語ゲームの観点を導入すると:
+Introducing the language game perspective:
 
-- **コンテキスト境界** = 異なる言語ゲームが行われている境界
-- **ユビキタス言語** = 特定の言語ゲーム内でのルール体系
-- **コンテキストの発見** = 「同じ言葉が異なるゲームで使われている」場面を見つけること
+- **Context boundary** = boundary where different language games are played
+- **Ubiquitous language** = the rule system within a specific language game
+- **Context discovery** = finding situations where "the same word is used in different games"
 
-### MinoDriven アプローチ: 目的駆動の言語ゲーム分析
+### MinoDriven Approach: Purpose-Driven Language Game Analysis
 
-@MinoDriven（仙塲大也）氏は、アクターの**目的**を言語ゲームの文脈として捉える:
+@MinoDriven (Daiya Seba) treats the actor's **purpose** as the context of the language game:
 
 ```text
-アクター × 目的 → 言語ゲーム（文脈） → ルール群 → コンテキスト
+Actor × Purpose → Language Game (Context) → Rule Set → Bounded Context
 ```
 
-これにより「なぜそこで境界を引くのか」が明確になる:
-**目的が異なれば、同じ言葉に異なるルールが適用されるから。**
+This clarifies "why draw the boundary there":
+**Because different purposes cause different rules to apply to the same words.**
 
 ---
 
-## 具体例: ECサイトにおける「商品」の言語ゲーム
+## Concrete Example: "商品" (Product) in an EC Site
 
-### ゲーム1: 購買ゲーム
+### Game 1: Purchasing Game (購買ゲーム)
 
-- **参加者:** 購入者
-- **目的:** 欲しい商品を見つけて購入する
-- **「商品」の意味:** 購入の対象
-- **関連属性:** 商品名、価格（税込表示価格）、レビュー評価、在庫有無、カテゴリ
-- **ルール:**
+- **Participant:** 購入者 (Buyer)
+- **Purpose:** Find and purchase desired products
+- **Meaning of "商品":** Object of purchase
+- **Related attributes:** 商品名、価格（税込表示価格）、レビュー評価、在庫有無、カテゴリ
+- **Rules:**
   - 在庫がなければ購入できない
   - 価格は税込で表示する
   - レビューは購入者のみ投稿できる
 
-### ゲーム2: 販売管理ゲーム
+### Game 2: Sales Management Game (販売管理ゲーム)
 
-- **参加者:** 出品者/販売者
-- **目的:** 商品を販売して利益を得る
-- **「商品」の意味:** 販売して利益を生む資産
-- **関連属性:** 商品名、原価、販売価格、利益率、在庫数、仕入先
-- **ルール:**
+- **Participant:** 出品者/販売者 (Seller)
+- **Purpose:** Sell products for profit
+- **Meaning of "商品":** Asset that generates profit through sales
+- **Related attributes:** 商品名、原価、販売価格、利益率、在庫数、仕入先
+- **Rules:**
   - 利益率が閾値以下なら値上げを検討する
   - 在庫が閾値以下なら自動発注する
   - 販売実績に基づいて価格を調整する
 
-### ゲーム3: 物流ゲーム
+### Game 3: Logistics Game (物流ゲーム)
 
-- **参加者:** 物流担当/倉庫管理者
-- **目的:** 商品を正確かつ効率的に配送する
-- **「商品」の意味:** 配送・保管の対象物
-- **関連属性:** 重量、サイズ、配送区分、保管条件、SKU
-- **ルール:**
+- **Participant:** 物流担当/倉庫管理者 (Logistics/Warehouse manager)
+- **Purpose:** Deliver products accurately and efficiently
+- **Meaning of "商品":** Object of delivery and storage
+- **Related attributes:** 重量、サイズ、配送区分、保管条件、SKU
+- **Rules:**
   - 重量とサイズで配送料が決まる
   - 温度管理が必要な商品は専用ラインで配送
   - 同一倉庫の商品はまとめて配送可能
 
-### 分析結果
+### Analysis Result
 
-「商品」という同じ言葉が3つの異なるゲームで使われている。各ゲームで:
-- 持つべき属性が異なる
-- 適用されるルールが異なる
-- 関心事が異なる
+The same word "商品" is used in three different games. In each game:
+- The required attributes differ
+- The applicable rules differ
+- The concerns differ
 
-→ これは3つの異なる境界付けられたコンテキストの候補である。
-
----
-
-## 分析の進め方
-
-### Step 1: 用語を集める
-
-- ドメインエキスパートとの会話、既存ドキュメント、コードから主要な名詞・動詞を収集する
-- 特に「全員が当然知っている」と思っている用語に注意する（暗黙の多義性が潜む）
-
-### Step 2: 使用場面を観察する
-
-各用語について:
-- **誰が**使っているか（アクター）
-- **何のために**使っているか（目的）
-- **どんなルール**の下で使っているか
-
-辞書的な定義を聞くのではなく、**実際の使用場面**を聞く。
-
-> 良い質問: 「『商品』という言葉を使うとき、どんな作業をしていますか？」
-> 悪い質問: 「『商品』の定義は何ですか？」
-
-### Step 3: 意味の分岐を発見する
-
-同じ用語が異なるアクター/目的で使われるとき:
-- 属性が異なるか？
-- ルールが異なるか？
-- ライフサイクルが異なるか？
-
-1つでも「はい」なら、コンテキスト境界の候補。
-
-### Step 4: 境界を検証する
-
-発見した境界候補について:
-- この境界で分けると、各コンテキスト内の用語は一貫するか？
-- コンテキスト間のやり取りは明確に定義できるか？
-- チーム構成と整合するか（コンウェイの法則）？
+→ These are candidates for three different bounded contexts.
 
 ---
 
-## 他の手法との関係
+## How to Conduct Analysis
 
-### イベントストーミング
+### Step 1: Collect Terms
 
-- イベントストーミングは**出来事（イベント）**を起点にドメインを探索する
-- 言語ゲーム分析は**用語の使われ方**を起点にする
-- 相補的に使える: イベントストーミングで発見したイベントに含まれる用語を、言語ゲーム分析で深掘りする
+- Gather major nouns and verbs from conversations with domain experts, existing documents, and code
+- Pay special attention to terms "everyone assumes they know" (implicit polysemy lurks there)
 
-### ドメインストーリーテリング
+### Step 2: Observe Usage
 
-- ドメインストーリーテリングは**アクターの行動の流れ**を図示する
-- 言語ゲーム分析はその中で使われる**用語の意味の変化**に注目する
-- ドメインストーリーの中で「同じ名詞なのに文脈で違うことを指している」箇所が、コンテキスト境界の手がかりになる
+For each term:
+- **Who** uses it (Actor)
+- **For what purpose** (Purpose)
+- **Under what rules**
 
-### コンテキストマッピング
+Don't ask for dictionary definitions — ask about **actual usage scenarios**.
 
-- コンテキストマッピングは**コンテキスト間の関係**を定義する
-- 言語ゲーム分析は**コンテキスト自体の発見**を支援する
-- 言語ゲーム分析 → コンテキスト発見 → コンテキストマッピング の順で使う
+> Good question: 「『商品』という言葉を使うとき、どんな作業をしていますか？」
+> Bad question: 「『商品』の定義は何ですか？」
+
+### Step 3: Discover Semantic Divergence
+
+When the same term is used by different actors/purposes:
+- Do the attributes differ?
+- Do the rules differ?
+- Does the lifecycle differ?
+
+If any answer is "yes," it's a candidate for a context boundary.
+
+### Step 4: Validate Boundaries
+
+For discovered boundary candidates:
+- Does splitting at this boundary make terminology consistent within each context?
+- Can inter-context interactions be clearly defined?
+- Does it align with team structure (Conway's Law)?
+
+---
+
+## Relationship with Other Methods
+
+### Event Storming
+
+- Event Storming explores the domain starting from **events**
+- Language game analysis starts from **how terms are used**
+- Complementary: drill down into terms found in events discovered via Event Storming
+
+### Domain Storytelling
+
+- Domain Storytelling illustrates **the flow of actor actions**
+- Language game analysis focuses on **changes in term meanings** within those flows
+- Points where "the same noun refers to different things depending on context" are clues for context boundaries
+
+### Context Mapping
+
+- Context Mapping defines **relationships between contexts**
+- Language game analysis supports **discovering contexts themselves**
+- Use in sequence: Language game analysis → Context discovery → Context Mapping

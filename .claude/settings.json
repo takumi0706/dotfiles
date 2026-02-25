@@ -130,7 +130,7 @@
     "coderabbit@claude-plugins-official": true
   },
   "language": "日本語",
-  "skipDangerousModePermissionPrompt": true,
+  "skipDangerousModePermissionPrompt": false,
   "feedbackSurveyState": {
     "lastShownTime": 1754137712092
   },

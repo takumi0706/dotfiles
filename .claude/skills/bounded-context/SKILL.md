@@ -165,7 +165,7 @@ graph LR
 
 分析結果は以下のパスに保存する:
 
-```
+```text
 <project>/docs/ddd/
 ├── context-map.md              # コンテキストマップ（全体像）
 ├── contexts/

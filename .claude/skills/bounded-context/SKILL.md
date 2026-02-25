@@ -14,62 +14,62 @@ allowed-tools:
   - WebFetch
 ---
 
-# DDD 境界付けられたコンテキスト分析スキル
+# DDD Bounded Context Analysis Skill
 
-## 背景思想
+## Background Philosophy
 
-### 言語ゲーム × DDD
+### Language Games × DDD
 
-ヴィトゲンシュタインは『哲学探究』第43節で「語の意味とは、言語におけるその使用である」と述べた。
-同じ単語でも、使われる文脈（誰が・何の目的で使うか）によって意味が変わる。この「言語ゲーム」の
-考え方は、DDDの「境界付けられたコンテキスト（Bounded Context）」と深く結びつく。
+In §43 of *Philosophical Investigations*, Wittgenstein stated: "The meaning of a word is its use in the language."
+The same word can have different meanings depending on the context — who uses it and for what purpose. This concept
+of "language games" is deeply connected to DDD's Bounded Context.
 
-**核心原則:** 「この言葉はどういう意味ですか？」ではなく「この言葉をどう使っていますか？」と問う。
+**Core principle:** Ask not "What does this word mean?" but "How is this word being used?"
 
-### @MinoDriven（仙塲大也）氏の手法
+### @MinoDriven (Daiya Seba) Approach
 
-アクターの**目的**を起点にコンテキスト境界を導出する:
+Derive context boundaries starting from the **purpose** of actors:
 
-- **第1層: アクター（Actor）** — 誰がシステムを使うか
-- **第2層: 目的（Purpose）** — アクターが何を達成したいか → 言語ゲームの「文脈」を決定
-- **第3層: ルール（Rule）** — 目的が異なれば同じ言葉でも適用されるルールが異なる
+- **Layer 1: Actor** — Who uses the system
+- **Layer 2: Purpose** — What the actor wants to achieve → determines the "context" of the language game
+- **Layer 3: Rules** — Different purposes lead to different rules applied to the same terms
 
-**1つのコンテキスト = [アクター, 目的, ルール群] のセット**
+**One context = a set of [Actor, Purpose, Rules]**
 
 ---
 
-## 実行手順
+## Execution Steps
 
-### Phase 1: ドメイン理解（入力収集）
+### Phase 1: Domain Understanding (Input Collection)
 
-**目標:** 分析対象のドメインを理解する。
+**Goal:** Understand the target domain.
 
-1. ユーザーに以下を確認する:
-   - 分析対象のシステム/ドメインの概要
-   - 既存のドキュメント（要件定義書、ユーザーストーリー等）の有無
-   - 既存コードベースの有無
+1. Confirm with the user:
+   - Overview of the target system/domain
+   - Availability of existing documents (requirements, user stories, etc.)
+   - Availability of existing codebase
 
-2. 既存コードがある場合:
-   - ディレクトリ構造を調査（`Glob`, `Read`）
-   - ドメインモデル/エンティティを特定（`Grep` で主要クラス/型を検索）
-   - 既存の命名パターンを収集
+2. If existing code is available:
+   - Investigate directory structure (`Glob`, `Read`)
+   - Identify domain models/entities (`Grep` to search for key classes/types)
+   - Collect existing naming patterns
 
-3. ドメイン知識が不足している場合:
-   - `WebSearch` / `WebFetch` で業界用語や標準的なビジネスプロセスを調査
+3. If domain knowledge is insufficient:
+   - Research industry terms and standard business processes via `WebSearch` / `WebFetch`
 
-### Phase 2: アクターの特定
+### Phase 2: Actor Identification
 
-**目標:** システムに関わるすべてのアクターとその目的を列挙する。
+**Goal:** Enumerate all actors and their purposes.
 
-1. アクターを洗い出す:
-   - 人間のアクター（エンドユーザー、管理者、オペレーター等）
-   - システムアクター（外部システム、バッチ処理等）
+1. Discover actors:
+   - Human actors (end users, administrators, operators, etc.)
+   - System actors (external systems, batch processes, etc.)
 
-2. 各アクターの目的を定義する:
-   - 「〜として、〜のために、〜したい」形式で記述
-   - 1つのアクターが複数の目的を持つことがある → それぞれ別の言語ゲームになりうる
+2. Define each actor's purpose:
+   - Use the format: "As [actor], in order to [purpose], I want to [action]"
+   - One actor may have multiple purposes → each may constitute a different language game
 
-3. 出力形式:
+3. Output format:
 
 ```markdown
 | アクター | 目的 | 主要なアクション |
@@ -78,18 +78,18 @@ allowed-tools:
 | 出品者   | 商品を販売して利益を得る | 商品登録、在庫管理、売上確認 |
 ```
 
-### Phase 3: 言語ゲームの分析
+### Phase 3: Language Game Analysis
 
-**目標:** 同じ用語がアクター/目的によって異なる意味を持つポイントを発見する。
+**Goal:** Discover points where the same term has different meanings depending on actor/purpose.
 
-1. **用語収集:** Phase 2 で出てきた主要な名詞・動詞を一覧化する
+1. **Term collection:** List all major nouns and verbs from Phase 2
 
-2. **意味の分岐点を探す:** 各用語について以下を問う:
-   - この用語を使うアクターは誰か？
-   - そのアクターの目的は何か？
-   - 目的が異なるとき、この用語の意味（属性、振る舞い、ルール）はどう変わるか？
+2. **Find semantic divergence points:** For each term, ask:
+   - Which actors use this term?
+   - What is each actor's purpose?
+   - When purposes differ, how do the term's meaning (attributes, behavior, rules) change?
 
-3. **言語ゲーム分析表の作成:**
+3. **Create a language game analysis table:**
 
 ```markdown
 | 用語 | アクター | 目的 | この文脈での意味 | 主要な属性/ルール |
@@ -99,19 +99,19 @@ allowed-tools:
 | 商品 | 物流担当 | 配送 | 配送対象（重量、サイズ、配送区分） | 梱包ルール、配送料計算 |
 ```
 
-4. **分岐の確認:** 意味が明確に異なる場合 → 異なるコンテキストの候補
+4. **Confirm divergence:** If meanings clearly differ → candidate for different contexts
 
-> **重要:** 分析の詳細な手法については `references/language-game-guide.md` を参照すること。
+> **Important:** Refer to `references/language-game-guide.md` for detailed analysis methods.
 
-### Phase 4: コンテキスト境界の定義
+### Phase 4: Context Boundary Definition
 
-**目標:** 各境界付けられたコンテキストを正式に定義する。
+**Goal:** Formally define each bounded context.
 
-1. Phase 3 の分析結果をもとに、コンテキスト候補をグループ化する:
-   - 同じアクター × 同じ目的 × 同じルール群 → 1つのコンテキスト
-   - 無理に分割しすぎない（凝集度を重視）
+1. Group context candidates based on Phase 3 results:
+   - Same actor × same purpose × same rule set → one context
+   - Avoid over-splitting (prioritize cohesion)
 
-2. 各コンテキストを定義する:
+2. Define each context:
 
 ```markdown
 ## コンテキスト: [名前]
@@ -129,28 +129,28 @@ allowed-tools:
   - [モデル1]: [説明]
 ```
 
-3. テンプレートは `references/context-analysis-template.md` を使用する。
+3. Use the template from `references/context-analysis-template.md`.
 
-### Phase 5: コンテキスト間の関係定義（コンテキストマップ）
+### Phase 5: Context Relationship Definition (Context Map)
 
-**目標:** コンテキスト間の関係性と統合パターンを定義する。
+**Goal:** Define relationships and integration patterns between contexts.
 
-1. コンテキスト間の関係を特定する:
-   - どのコンテキストがどのコンテキストのデータを必要とするか
-   - データの流れの方向性
+1. Identify inter-context relationships:
+   - Which context needs data from which other context
+   - Direction of data flow
 
-2. 統合パターンを選択する:
+2. Select integration patterns:
 
-| パターン | 使用場面 |
-|----------|----------|
-| Shared Kernel | 2つのコンテキストが密結合で共有部分が小さい場合 |
-| Customer-Supplier | 上流が下流のニーズに応える関係 |
-| Conformist | 下流が上流のモデルにそのまま従う |
-| Anti-Corruption Layer | 外部/レガシーシステムとの統合 |
-| Published Language | 標準化されたインターフェースで統合 |
-| Separate Ways | 統合の必要がない |
+| Pattern | Use case |
+|---------|----------|
+| Shared Kernel | Two contexts are tightly coupled with a small shared part |
+| Customer-Supplier | Upstream serves downstream's needs |
+| Conformist | Downstream conforms to upstream's model as-is |
+| Anti-Corruption Layer | Integration with external/legacy systems |
+| Published Language | Integration via standardized interfaces |
+| Separate Ways | No integration needed |
 
-3. コンテキストマップを Mermaid 形式で出力する:
+3. Output the context map in Mermaid format:
 
 ```mermaid
 graph LR
@@ -161,36 +161,36 @@ graph LR
 
 ---
 
-## 出力形式
+## Output Format
 
-分析結果は以下のパスに保存する:
+Save analysis results at the following path:
 
 ```text
 <project>/docs/ddd/
-├── context-map.md              # コンテキストマップ（全体像）
+├── context-map.md              # Context map (overview)
 ├── contexts/
-│   ├── <context-name-1>.md     # 各コンテキストの詳細（テンプレート使用）
+│   ├── <context-name-1>.md     # Each context's details (using template)
 │   ├── <context-name-2>.md
 │   └── ...
-└── language-games.md           # 言語ゲーム分析表（Phase 3 の成果物）
+└── language-games.md           # Language game analysis table (Phase 3 deliverable)
 ```
 
-- `context-map.md`: Mermaid 図 + コンテキスト間関係の説明
-- `contexts/<name>.md`: `references/context-analysis-template.md` に基づく各コンテキストの定義
-- `language-games.md`: 用語の意味の分岐分析
+- `context-map.md`: Mermaid diagram + description of inter-context relationships
+- `contexts/<name>.md`: Each context definition based on `references/context-analysis-template.md`
+- `language-games.md`: Term semantic divergence analysis
 
 ---
 
-## 重要な注意事項
+## Important Notes
 
-1. **完璧を目指さない:** 境界付けられたコンテキストは反復的に洗練されるもの。最初の分析で完璧な境界を引く必要はない。
+1. **Don't aim for perfection:** Bounded contexts are refined iteratively. The first analysis doesn't need perfect boundaries.
 
-2. **アクターの目的から始める:** 技術的な関心（データベース、API）からではなく、ビジネス上の目的から境界を導出する。
+2. **Start from actor purposes:** Derive boundaries from business purposes, not technical concerns (databases, APIs).
 
-3. **用語の一致は偶然かもしれない:** 同じ名前が使われているからといって同じ概念とは限らない。必ず「誰が・何のために使うか」を確認する。
+3. **Matching terms may be coincidental:** The same name doesn't necessarily mean the same concept. Always verify "who uses it and for what purpose."
 
-4. **用語の不一致も偶然かもしれない:** 異なる名前が使われていても、同じコンテキスト内の同じ概念かもしれない。
+4. **Mismatching terms may also be coincidental:** Different names may still refer to the same concept within a context.
 
-5. **既存コードを尊重する:** 既にコードベースがある場合、理想的な境界と現実のコード構造のギャップを明示し、段階的な移行戦略を提案する。
+5. **Respect existing code:** If a codebase exists, explicitly show the gap between ideal boundaries and actual code structure, and suggest an incremental migration strategy.
 
-6. **ユーザーとの対話を重視する:** ドメインエキスパートはユーザー自身。分析中に不明点があれば必ず確認する。
+6. **Prioritize dialogue with users:** The domain expert is the user. Always confirm uncertainties during analysis.

@@ -29,7 +29,14 @@ link_to_homedir() {
       # .zshrc は home-manager (Nix) が管理するためスキップ
       [[ $(basename "$f") == ".zshrc" ]] && continue
       # .config は home-manager が xdg.configFile で管理するためスキップ
-      [[ $(basename "$f") == ".config" ]] && continue
+      # レガシーなシンボリックリンク ~/.config → dotfiles/.config が残っていれば削除
+      if [[ $(basename "$f") == ".config" ]]; then
+        if [[ -L "$HOME/.config" ]]; then
+          command echo "removing legacy symlink: ~/.config -> $(readlink "$HOME/.config")"
+          command rm -f "$HOME/.config"
+        fi
+        continue
+      fi
       if [[ -L "$HOME/$(basename "$f")" ]];then
         command rm -f "$HOME/$(basename "$f")"
       fi

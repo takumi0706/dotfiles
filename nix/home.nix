@@ -28,16 +28,25 @@ in
   };
 
   # ------------------------------------------------------------------
-  # dotfiles — mkOutOfStoreSymlink で既存設定をそのままリンク
-  # rebuild 不要で設定変更が即反映される
+  # dotfiles — flake 相対パスで Nix store にコピーしてリンク
+  # 設定変更時は make switch で反映
   # ------------------------------------------------------------------
   xdg.configFile = {
-    "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/nvim";
-    "wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/wezterm";
-    "zsh".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/zsh";
-    "starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/starship.toml";
-    "git/ignore".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/git/ignore";
-    "gh/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/gh/config.yml";
+    "nvim" = {
+      source = ../.config/nvim;
+      recursive = true;
+    };
+    "wezterm" = {
+      source = ../.config/wezterm;
+      recursive = true;
+    };
+    "zsh" = {
+      source = ../.config/zsh;
+      recursive = true;
+    };
+    "starship.toml".source = ../.config/starship.toml;
+    "git/ignore".source = ../.config/git/ignore;
+    "gh/config.yml".source = ../.config/gh/config.yml;
   };
 
   # ------------------------------------------------------------------

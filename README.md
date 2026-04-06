@@ -75,6 +75,5 @@ Apple Silicon (aarch64) と Intel (x86_64) の両方に対応しています。
 
 ## dotfiles の設定変更
 
-nvim / wezterm / starship / zsh の設定は `mkOutOfStoreSymlink` でリンクされているため、ファイルを編集するだけで即反映されます（`darwin-rebuild switch` 不要）。
-
-パッケージの追加・削除や `programs.*` の変更は `make switch` で反映してください。
+nvim / wezterm / starship / zsh の設定ファイルを編集した後は `make switch` で反映してください。
+パッケージの追加・削除や `programs.*` の変更も同様です。

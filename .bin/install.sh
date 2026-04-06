@@ -57,8 +57,11 @@ apply_nix_config() {
   local attr
   attr="$(get_flake_attr)"
 
+  # sudo 実行時に USER/HOME を保持して、home-manager が正しいユーザーに適用されるようにする
+  local sudo_cmd="sudo --preserve-env=USER,HOME"
+
   if command -v darwin-rebuild &>/dev/null; then
-    sudo darwin-rebuild switch --flake ".#${attr}" --impure
+    $sudo_cmd darwin-rebuild switch --flake ".#${attr}" --impure
   else
     # 初回: darwin-rebuild がまだ PATH にない
     # .#darwinConfigurations.${attr}.system を build して
@@ -69,7 +72,7 @@ apply_nix_config() {
     # shellcheck disable=SC2064
     trap "rm -rf -- '$tmp_dir'" EXIT
     nix build ".#darwinConfigurations.${attr}.system" --impure --out-link "$out_link"
-    sudo "$out_link/sw/bin/darwin-rebuild" switch --flake ".#${attr}" --impure
+    $sudo_cmd "$out_link/sw/bin/darwin-rebuild" switch --flake ".#${attr}" --impure
   fi
 }
 

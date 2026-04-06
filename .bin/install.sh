@@ -58,7 +58,7 @@ apply_nix_config() {
   attr="$(get_flake_attr)"
 
   if command -v darwin-rebuild &>/dev/null; then
-    darwin-rebuild switch --flake ".#${attr}" --impure
+    sudo darwin-rebuild switch --flake ".#${attr}" --impure
   else
     # 初回: darwin-rebuild がまだ PATH にない
     # .#darwinConfigurations.${attr}.system を build して
@@ -69,7 +69,7 @@ apply_nix_config() {
     # shellcheck disable=SC2064
     trap "rm -rf -- '$tmp_dir'" EXIT
     nix build ".#darwinConfigurations.${attr}.system" --impure --out-link "$out_link"
-    "$out_link/sw/bin/darwin-rebuild" switch --flake ".#${attr}" --impure
+    sudo "$out_link/sw/bin/darwin-rebuild" switch --flake ".#${attr}" --impure
   fi
 }
 

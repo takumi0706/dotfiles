@@ -97,6 +97,9 @@ in
     };
 
     initContent = ''
+      # ~/.local/bin (claude CLI etc.)
+      [[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
+
       # Package manager completions (npm/yarn/pnpm)
       [[ -f "$HOME/.config/zsh/completions.zsh" ]] && source "$HOME/.config/zsh/completions.zsh"
 

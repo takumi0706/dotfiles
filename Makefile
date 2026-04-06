@@ -11,7 +11,7 @@ setup:
 switch:
 	@attr="default"; \
 	if [ "$$(uname -m)" = "x86_64" ]; then attr="default-x86"; fi; \
-	sudo --preserve-env=USER,HOME darwin-rebuild switch --flake ".#$$attr" --impure
+	sudo darwin-rebuild switch --flake ".#$$attr" --impure
 
 test:
 	CI=true bash .bin/setup.sh

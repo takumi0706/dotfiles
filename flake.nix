@@ -31,20 +31,16 @@
       # devShell はどのアーキテクチャでも使えるように
       forAllDarwinSystems = f: nixpkgs.lib.genAttrs darwinSystems f;
 
-      # ホスト名に依存しない汎用構成
-      # darwin-rebuild switch --flake .#default --impure で適用すると、
-      # builtins.getEnv から USER/HOME を取り込める
-      # （pure evaluation では空文字になり、fallback を使う）
+      # sudo 経由で実行された場合は SUDO_USER から元ユーザーを取得
+      # 直接実行の場合は USER を使用
+      # pure evaluation（CI）では空文字→ fallback
       username =
         let
-          env = builtins.getEnv "USER";
+          sudoUser = builtins.getEnv "SUDO_USER";
+          user = builtins.getEnv "USER";
         in
-        if env != "" then env else "unknown";
-      homeDir =
-        let
-          env = builtins.getEnv "HOME";
-        in
-        if env != "" then env else "/Users/${username}";
+        if sudoUser != "" then sudoUser else if user != "" then user else "unknown";
+      homeDir = "/Users/${username}";
       dotfilesDir = "${homeDir}/dotfiles";
 
       # darwin 構成を生成する関数
@@ -81,7 +77,7 @@
         };
     in
     {
-      # darwin-rebuild switch --flake .#default --impure で適用
+      # sudo darwin-rebuild switch --flake .#default --impure で適用
       darwinConfigurations.default = mkDarwinConfig "aarch64-darwin";
       darwinConfigurations.default-x86 = mkDarwinConfig "x86_64-darwin";
 

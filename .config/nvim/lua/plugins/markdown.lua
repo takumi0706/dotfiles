@@ -49,10 +49,17 @@ return {
         style = "full",
         cell = "padded",
         border = {
-          "┌", "┬", "┐",
-          "├", "┼", "┤",
-          "└", "┴", "┘",
-          "│", "─",
+          "┌",
+          "┬",
+          "┐",
+          "├",
+          "┼",
+          "┤",
+          "└",
+          "┴",
+          "┘",
+          "│",
+          "─",
         },
       },
       link = {
@@ -203,7 +210,10 @@ return {
           end
 
           if target_diagram.renderer_id ~= "mermaid" then
-            vim.notify("Mermaidダイアグラムではありません: " .. target_diagram.renderer_id, vim.log.levels.WARN)
+            vim.notify(
+              "Mermaidダイアグラムではありません: " .. target_diagram.renderer_id,
+              vim.log.levels.WARN
+            )
             return
           end
 

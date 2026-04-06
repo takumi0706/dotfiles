@@ -4,7 +4,10 @@ on:
   push:
     branches: [main]
     paths:
-      - '.bin/install.sh'
+      - '.bin/**'
+      - 'flake.nix'
+      - 'flake.lock'
+      - 'nix/**'
       - '.github/workflows/install-test.yml'
   pull_request:
     branches: [main]
@@ -15,8 +18,24 @@ permissions:
   contents: read
 
 jobs:
-  test:
-    name: Install (${{ matrix.os }})
+  nix-build:
+    name: Nix build check
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: cachix/install-nix-action@v30
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+
+      - name: Check flake
+        run: nix flake check
+
+      - name: Build darwin configuration (dry-run)
+        run: nix build .#darwinConfigurations.default.system --dry-run --impure
+
+  setup-test:
+    name: Setup (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -36,8 +55,8 @@ jobs:
           mkdir -p "$TEST_HOME"
           echo "TEST_HOME=$TEST_HOME" >> $GITHUB_ENV
 
-      - name: Run install.sh
-        run: HOME="$TEST_HOME" bash .bin/install.sh
+      - name: Run setup.sh
+        run: HOME="$TEST_HOME" bash .bin/setup.sh
 
       - name: Verify symlinks
         run: |

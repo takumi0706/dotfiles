@@ -1,0 +1,97 @@
+{
+  config,
+  pkgs,
+  lib,
+  username,
+  homeDir,
+  dotfilesDir,
+  ...
+}:
+
+{
+  home = {
+    stateVersion = "24.11";
+    username = username;
+    homeDirectory = homeDir;
+
+    packages = with pkgs; [
+      fd
+      lazygit
+      ripgrep
+      jq
+      nerd-fonts.jetbrains-mono
+    ];
+  };
+
+  # ------------------------------------------------------------------
+  # dotfiles — mkOutOfStoreSymlink で既存設定をそのままリンク
+  # rebuild 不要で設定変更が即反映される
+  # ------------------------------------------------------------------
+  xdg.configFile = {
+    "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/nvim";
+    "wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/wezterm";
+    "zsh".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/zsh";
+    "starship.toml".source = "${dotfilesDir}/.config/starship.toml";
+    "git/ignore".source = "${dotfilesDir}/.config/git/ignore";
+    "gh/config.yml".source = "${dotfilesDir}/.config/gh/config.yml";
+  };
+
+  # ------------------------------------------------------------------
+  # programs.* DSL
+  # ------------------------------------------------------------------
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    # 設定は xdg.configFile."starship.toml" で既存tomlを参照
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.bat.enable = true;
+
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
+  programs.git.enable = true;
+
+  # ------------------------------------------------------------------
+  # Zsh
+  # ------------------------------------------------------------------
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    syntaxHighlighting.enable = true;
+    autosuggestion.enable = true;
+
+    shellAliases = {
+      switch = "darwin-rebuild switch --flake ~/dotfiles --impure";
+    };
+
+    initExtra = ''
+      # Package manager completions (npm/yarn/pnpm)
+      [[ -f "$HOME/.config/zsh/completions.zsh" ]] && source "$HOME/.config/zsh/completions.zsh"
+
+      # fzf custom config (colors, key bindings, functions)
+      [[ -f "$HOME/.config/zsh/fzf.zsh" ]] && source "$HOME/.config/zsh/fzf.zsh"
+
+      # IDE function (WezTerm IDE layout)
+      [[ -f "$HOME/.config/zsh/ide.zsh" ]] && source "$HOME/.config/zsh/ide.zsh"
+
+      # Kiro shell integration
+      [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+    '';
+  };
+}

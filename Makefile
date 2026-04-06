@@ -1,9 +1,28 @@
-.PHONY: lint lint-shell lint-lua lint-toml lint-python lint-json install test
+.PHONY: lint lint-shell lint-lua lint-toml lint-python lint-json install setup switch test
 
-lint: lint-shell lint-lua lint-toml lint-python lint-json
+# --- Primary targets ---
+
+install:
+	bash .bin/install.sh
+
+setup:
+	bash .bin/setup.sh
+
+switch:
+	darwin-rebuild switch --flake . --impure
+
+test:
+	CI=true bash .bin/setup.sh
+
+# --- Lint (run inside nix develop) ---
+
+lint:
+	nix develop --command $(MAKE) _lint
+
+_lint: lint-shell lint-lua lint-toml lint-python lint-json
 
 lint-shell:
-	shellcheck .bin/install.sh .zshrc .config/zsh/ide.zsh
+	shellcheck .bin/install.sh .bin/setup.sh .config/zsh/ide.zsh
 
 lint-lua:
 	stylua --check .config/wezterm/ .config/nvim/
@@ -18,9 +37,3 @@ lint-json:
 	@for f in .claude/settings.json .claude/settings.local.json; do \
 		[ -f "$$f" ] && jq empty "$$f" && echo "$$f: valid"; \
 	done
-
-install:
-	bash .bin/install.sh
-
-test:
-	CI=true bash .bin/install.sh

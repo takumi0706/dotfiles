@@ -12,57 +12,15 @@ permissions:
   contents: read
 
 jobs:
-  shellcheck:
-    name: ShellCheck
-    runs-on: ubuntu-latest
+  lint:
+    name: Lint (Nix devShell)
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Run ShellCheck
-        run: shellcheck -x -S error .bin/install.sh .zshrc
 
-  stylua:
-    name: StyLua
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: JohnnyMorganz/stylua-action@479972f01e665acfcba96ada452c36608bdbbb5e # v4.1.0
+      - uses: cachix/install-nix-action@v30
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.20.0
-          args: --check .config/wezterm/
+          nix_path: nixpkgs=channel:nixpkgs-unstable
 
-  taplo:
-    name: Taplo
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Install Taplo
-        run: |
-          curl -fsSL https://github.com/tamasfe/taplo/releases/download/0.9.3/taplo-full-linux-x86_64.gz \
-            | gunzip > taplo && chmod +x taplo
-          sudo mv taplo /usr/local/bin/
-      - name: Check TOML
-        run: taplo check .config/starship.toml
-
-  ruff:
-    name: Ruff
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: astral-sh/ruff-action@4919ec5cf1f49eff0871dbcea0da843445b837e6 # v3.6.1
-        with:
-          args: check .claude/hooks/
-
-  json:
-    name: JSON Validate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Validate JSON files
-        run: |
-          for f in .claude/settings.json .claude/settings.local.json; do
-            if [ -f "$f" ]; then
-              echo "Validating $f"
-              jq empty "$f" && echo "$f: valid"
-            fi
-          done
+      - name: Run all linters
+        run: nix develop --command make _lint

@@ -69,7 +69,10 @@ in
     nix-direnv.enable = true;
   };
 
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    signing.format = null;
+  };
 
   # ------------------------------------------------------------------
   # Zsh
@@ -84,7 +87,7 @@ in
       switch = "sudo darwin-rebuild switch --flake ${dotfilesDir}#${flakeAttr} --impure";
     };
 
-    initExtra = ''
+    initContent = ''
       # Package manager completions (npm/yarn/pnpm)
       [[ -f "$HOME/.config/zsh/completions.zsh" ]] && source "$HOME/.config/zsh/completions.zsh"
 

@@ -23,12 +23,13 @@
       home-manager,
     }:
     let
-      system = "aarch64-darwin";
+      system = builtins.currentSystem;
       pkgs = nixpkgs.legacyPackages.${system};
 
       # ホスト名に依存しない汎用構成
-      # darwin-rebuild switch --flake . --impure で適用
-      # builtins.getEnv は --impure フラグが必要
+      # darwin-rebuild switch --flake . --impure で適用すると、
+      # builtins.getEnv から USER/HOME を取り込める
+      # （pure evaluation では空文字になり、fallback を使う）
       username =
         let
           env = builtins.getEnv "USER";

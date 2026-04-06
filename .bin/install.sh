@@ -35,7 +35,8 @@ apply_nix_config() {
     darwin-rebuild switch --flake . --impure
   else
     # 初回: darwin-rebuild がまだ PATH にない
-    nix run nix-darwin/master#darwin-rebuild -- switch --flake . --impure
+    # flake.lock で固定された nix-darwin を参照するため、ローカルの flake 入力を使用
+    nix run nix-darwin -- switch --flake . --impure
   fi
 }
 

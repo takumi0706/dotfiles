@@ -6,7 +6,7 @@ is_ci() {
 }
 
 helpmsg() {
-  command echo "Usage: $0 [--help | -h]" 0>&2
+  command echo "Usage: $0 [--help | -h]" 1>&2
   command echo ""
 }
 
@@ -122,7 +122,7 @@ while [ $# -gt 0 ];do
       ;;
     --help|-h)
       helpmsg
-      exit 1
+      exit 0
       ;;
     *)
       ;;

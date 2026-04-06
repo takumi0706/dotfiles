@@ -12,26 +12,9 @@
     home = homeDir;
   };
 
-  # Nix 設定
-  nix = {
-    gc = {
-      automatic = true;
-      interval = {
-        Weekday = 0;
-        Hour = 3;
-        Minute = 0;
-      };
-      options = "--delete-older-than 30d";
-    };
-    optimise.automatic = true;
-    settings = {
-      auto-optimise-store = true;
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-    };
-  };
+  # Nix 管理は Determinate Nix に委譲
+  # nix.* オプション（GC, optimise, settings等）は Determinate 側で管理される
+  nix.enable = false;
 
   # セキュリティ — Touch ID for sudo
   security.pam.services.sudo_local.touchIdAuth = true;

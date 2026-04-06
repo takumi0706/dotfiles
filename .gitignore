@@ -58,15 +58,39 @@
 !/.xprofile
 !/.xsessionrc
 !/.config/
-!/.config/**
-# Exclude local/sensitive config files
-/.config/cagent/
+/.config/*
+# gh
+!/.config/gh/
+!/.config/gh/config.yml
+# git
+!/.config/git/
+!/.config/git/ignore
+# jgit
+!/.config/jgit/
+!/.config/jgit/config
+# starship
+!/.config/starship.toml
+# nvim
+!/.config/nvim/
+!/.config/nvim/README.md
+!/.config/nvim/init.lua
+!/.config/nvim/ftplugin/
+!/.config/nvim/ftplugin/**
+!/.config/nvim/lua/
+!/.config/nvim/lua/config/
+!/.config/nvim/lua/config/**
+!/.config/nvim/lua/plugins/
+!/.config/nvim/lua/plugins/**
+# wezterm
+!/.config/wezterm/
+!/.config/wezterm/**
+# zsh
+!/.config/zsh/
+!/.config/zsh/**
+# Exclude from whitelisted dirs above
+*.hm-backup
 /.config/gh/hosts.yml
-# GitHub Copilot - IDE managed, contains personal tokens and session data
-/.config/github-copilot/
-# Raycast - use Raycast Cloud Sync or Export/Import instead
-/.config/raycast/
-# Neovim generated files
+/.config/git/config
 /.config/nvim/lazy-lock.json
 /.config/nvim/plugin/
 /.config/nvim/.luarc.json

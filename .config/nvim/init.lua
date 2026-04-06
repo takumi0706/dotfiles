@@ -1,1 +1,9 @@
-/nix/store/3g0s97sii3p02kj87xyx75n5wdnq0wfd-home-manager-files/.config/nvim/init.lua
+-- Neovim Configuration
+-- Author: takumi0706
+-- License: MIT
+
+-- Load core settings first
+require("config.options")
+require("config.lazy")
+require("config.keymaps")
+require("config.autocmds")

@@ -81,7 +81,7 @@ in
     autosuggestion.enable = true;
 
     shellAliases = {
-      switch = "darwin-rebuild switch --flake ${dotfilesDir}#${flakeAttr} --impure";
+      switch = "sudo darwin-rebuild switch --flake ${dotfilesDir}#${flakeAttr} --impure";
     };
 
     initExtra = ''

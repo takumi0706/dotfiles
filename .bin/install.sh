@@ -61,9 +61,13 @@ apply_nix_config() {
     darwin-rebuild switch --flake ".#${attr}" --impure
   else
     # 初回: darwin-rebuild がまだ PATH にない
-    # .#packages でローカル flake.lock に固定された nix-darwin を使用
-    nix build ".#darwinConfigurations.${attr}.system" --impure
-    ./result/sw/bin/darwin-rebuild switch --flake ".#${attr}" --impure
+    # .#darwinConfigurations.${attr}.system を build して
+    # ローカル flake.lock に固定された nix-darwin を使用
+    local out_link
+    out_link="$(mktemp -d)/result"
+    nix build ".#darwinConfigurations.${attr}.system" --impure --out-link "$out_link"
+    "$out_link/sw/bin/darwin-rebuild" switch --flake ".#${attr}" --impure
+    rm -f "$out_link"
   fi
 }
 

@@ -1,6 +1,7 @@
 {
   pkgs,
   username,
+  homeDir,
   ...
 }:
 
@@ -8,7 +9,7 @@
   # ユーザー設定
   system.primaryUser = username;
   users.users.${username} = {
-    home = "/Users/${username}";
+    home = homeDir;
   };
 
   # Nix 設定
@@ -56,7 +57,7 @@
     NSGlobalDomain.KeyRepeat = 2;
 
     # スクリーンショット
-    screencapture.location = "/Users/${username}/Pictures/screenshots";
+    screencapture.location = "${homeDir}/Pictures/screenshots";
 
     # ログイン
     loginwindow.GuestEnabled = false;

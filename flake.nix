@@ -32,7 +32,7 @@
       forAllDarwinSystems = f: nixpkgs.lib.genAttrs darwinSystems f;
 
       # ホスト名に依存しない汎用構成
-      # darwin-rebuild switch --flake . --impure で適用すると、
+      # darwin-rebuild switch --flake .#default --impure で適用すると、
       # builtins.getEnv から USER/HOME を取り込める
       # （pure evaluation では空文字になり、fallback を使う）
       username =

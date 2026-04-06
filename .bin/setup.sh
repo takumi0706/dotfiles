@@ -24,6 +24,7 @@ link_to_homedir() {
   if [[ "$HOME" != "$dotdir" ]];then
     for f in "$dotdir"/.??*; do
       [[ $(basename "$f") == ".git" ]] && continue
+      [[ $(basename "$f") == ".github" ]] && continue
       [[ $(basename "$f") == ".claude" ]] && continue
       # .zshrc は home-manager (Nix) が管理するためスキップ
       [[ $(basename "$f") == ".zshrc" ]] && continue

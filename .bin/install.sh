@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
-set -ue
+set -ueo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
+
+# アーキテクチャに応じた flake attribute を決定
+get_flake_attr() {
+  if [ "$(uname -m)" = "x86_64" ]; then
+    echo "default-x86"
+  else
+    echo "default"
+  fi
+}
 
 # -----------------------------------------------------------
 # 1. Nix のインストール（未インストール時）
@@ -14,8 +23,12 @@ install_nix() {
   fi
 
   echo "Installing Nix (Determinate Systems installer)..."
+  local installer
+  installer="$(mktemp)"
   curl --proto '=https' --tlsv1.2 -sSf -L \
-    https://install.determinate.systems/nix | sh -s -- install
+    https://install.determinate.systems/nix -o "$installer"
+  sh "$installer" -- install
+  rm -f "$installer"
 
   # インストール直後に nix コマンドを使えるようにする
   # shellcheck disable=SC1091
@@ -31,12 +44,16 @@ apply_nix_config() {
   echo "Applying nix-darwin configuration..."
   cd "$DOTFILES_DIR"
 
+  local attr
+  attr="$(get_flake_attr)"
+
   if command -v darwin-rebuild &>/dev/null; then
-    darwin-rebuild switch --flake . --impure
+    darwin-rebuild switch --flake ".#${attr}" --impure
   else
     # 初回: darwin-rebuild がまだ PATH にない
-    # flake.lock で固定された nix-darwin を参照するため、ローカルの flake 入力を使用
-    nix run nix-darwin -- switch --flake . --impure
+    # .#packages でローカル flake.lock に固定された nix-darwin を使用
+    nix build ".#darwinConfigurations.${attr}.system" --impure
+    ./result/sw/bin/darwin-rebuild switch --flake ".#${attr}" --impure
   fi
 }
 

@@ -27,6 +27,8 @@ link_to_homedir() {
       [[ $(basename "$f") == ".claude" ]] && continue
       # .zshrc は home-manager (Nix) が管理するためスキップ
       [[ $(basename "$f") == ".zshrc" ]] && continue
+      # .config は home-manager が xdg.configFile で管理するためスキップ
+      [[ $(basename "$f") == ".config" ]] && continue
       if [[ -L "$HOME/$(basename "$f")" ]];then
         command rm -f "$HOME/$(basename "$f")"
       fi

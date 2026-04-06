@@ -56,7 +56,7 @@
     NSGlobalDomain.KeyRepeat = 2;
 
     # スクリーンショット
-    screencapture.location = "~/Pictures/screenshots";
+    screencapture.location = "/Users/${username}/Pictures/screenshots";
 
     # ログイン
     loginwindow.GuestEnabled = false;

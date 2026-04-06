@@ -2,11 +2,15 @@
   config,
   pkgs,
   lib,
+  system,
   username,
   homeDir,
   dotfilesDir,
   ...
 }:
+let
+  flakeAttr = if system == "x86_64-darwin" then "default-x86" else "default";
+in
 
 {
   home = {
@@ -77,7 +81,7 @@
     autosuggestion.enable = true;
 
     shellAliases = {
-      switch = "darwin-rebuild switch --flake ~/dotfiles --impure";
+      switch = "darwin-rebuild switch --flake ${dotfilesDir}#${flakeAttr} --impure";
     };
 
     initExtra = ''
@@ -91,7 +95,7 @@
       [[ -f "$HOME/.config/zsh/ide.zsh" ]] && source "$HOME/.config/zsh/ide.zsh"
 
       # Kiro shell integration
-      [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+      [[ "$TERM_PROGRAM" == "kiro" ]] && command -v kiro &>/dev/null && . "$(kiro --locate-shell-integration-path zsh)"
     '';
   };
 }

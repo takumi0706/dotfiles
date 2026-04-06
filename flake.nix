@@ -69,6 +69,7 @@
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {
                 inherit
+                  system
                   username
                   homeDir
                   dotfilesDir

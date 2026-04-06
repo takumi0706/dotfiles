@@ -62,6 +62,8 @@
 # Exclude local/sensitive config files
 /.config/cagent/
 /.config/gh/hosts.yml
+# GitHub Copilot - IDE managed, contains personal tokens and session data
+/.config/github-copilot/
 # Raycast - use Raycast Cloud Sync or Export/Import instead
 /.config/raycast/
 # Neovim generated files

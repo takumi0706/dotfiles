@@ -31,9 +31,9 @@
     "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/nvim";
     "wezterm".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/wezterm";
     "zsh".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/zsh";
-    "starship.toml".source = "${dotfilesDir}/.config/starship.toml";
-    "git/ignore".source = "${dotfilesDir}/.config/git/ignore";
-    "gh/config.yml".source = "${dotfilesDir}/.config/gh/config.yml";
+    "starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/starship.toml";
+    "git/ignore".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/git/ignore";
+    "gh/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/gh/config.yml";
   };
 
   # ------------------------------------------------------------------

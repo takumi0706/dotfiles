@@ -35,5 +35,5 @@ lint-python:
 
 lint-json:
 	@for f in .claude/settings.json .claude/settings.local.json; do \
-		[ -f "$$f" ] && jq empty "$$f" && echo "$$f: valid"; \
+		if [ -f "$$f" ]; then jq empty "$$f" && echo "$$f: valid"; fi; \
 	done

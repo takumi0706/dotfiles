@@ -63,11 +63,13 @@ apply_nix_config() {
     # 初回: darwin-rebuild がまだ PATH にない
     # .#darwinConfigurations.${attr}.system を build して
     # ローカル flake.lock に固定された nix-darwin を使用
-    local out_link
-    out_link="$(mktemp -d)/result"
+    local tmp_dir out_link
+    tmp_dir="$(mktemp -d)"
+    out_link="${tmp_dir}/result"
+    # shellcheck disable=SC2064
+    trap "rm -rf -- '$tmp_dir'" EXIT
     nix build ".#darwinConfigurations.${attr}.system" --impure --out-link "$out_link"
     "$out_link/sw/bin/darwin-rebuild" switch --flake ".#${attr}" --impure
-    rm -f "$out_link"
   fi
 }
 

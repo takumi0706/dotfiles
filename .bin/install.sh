@@ -27,7 +27,7 @@ install_nix() {
   installer="$(mktemp)"
   curl --proto '=https' --tlsv1.2 -sSf -L \
     https://install.determinate.systems/nix -o "$installer"
-  sh "$installer" -- install
+  sh "$installer" install
   rm -f "$installer"
 
   # インストール直後に nix コマンドを使えるようにする
@@ -42,6 +42,16 @@ install_nix() {
 # -----------------------------------------------------------
 apply_nix_config() {
   echo "Applying nix-darwin configuration..."
+
+  # flake.nix の dotfilesDir は $HOME/dotfiles 固定のため、
+  # リポジトリが別の場所にある場合はエラーにする
+  local expected="$HOME/dotfiles"
+  if [ "$DOTFILES_DIR" != "$expected" ]; then
+    echo "Error: dotfiles must be at $expected (currently at $DOTFILES_DIR)" >&2
+    echo "Run: ln -s $DOTFILES_DIR $expected" >&2
+    exit 1
+  fi
+
   cd "$DOTFILES_DIR"
 
   local attr

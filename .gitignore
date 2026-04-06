@@ -91,3 +91,10 @@
 !/.stylua.toml
 !/Makefile
 
+# Nix
+!/flake.nix
+!/flake.lock
+!/nix/
+!/nix/**
+/result
+

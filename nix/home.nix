@@ -25,6 +25,7 @@ in
       jq
       nerd-fonts.jetbrains-mono
       codex
+      nodejs_22
     ];
 
     # Skills は ~/.agents/skills/ (複数AIツール共通の標準パス)

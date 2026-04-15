@@ -45,6 +45,7 @@ dotfiles/
 | カテゴリ | パッケージ |
 |---------|-----------|
 | CLI ツール | starship, fzf, fd, bat, neovim, lazygit, ripgrep, jq, direnv, codex |
+| ランタイム | Node.js 22 (LTS) |
 | フォント | JetBrainsMono Nerd Font |
 | Lint (devShell) | shellcheck, stylua, taplo, ruff, jq |
 | GUI アプリ | WezTerm（手動インストール） |

@@ -27,20 +27,26 @@ in
       codex
     ];
 
-    # Codex は ~/.codex/ 固定 (XDG非準拠) なので home.file で配置
-    file.".codex/config.toml".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/codex/config.toml";
-
     # Skills は ~/.agents/skills/ (複数AIツール共通の標準パス)
     file.".agents/skills".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.agents/skills";
 
-    # secrets.zsh が無ければテンプレから初回のみコピー (既存は絶対上書きしない)
-    activation.copySecretsTemplate = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    # secrets.zsh / codex/config.toml はテンプレから初回のみコピー (既存は絶対上書きしない)
+    # codex は config.toml に [projects.*] 等の実行時状態を追記するため symlink にできない
+    activation.copyTemplates = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      run mkdir -p "$HOME/.config/zsh"
       if [ ! -f "$HOME/.config/zsh/secrets.zsh" ]; then
-        run cp ${dotfilesDir}/.config/zsh/secrets.zsh.example \
-               $HOME/.config/zsh/secrets.zsh
-        run chmod 600 $HOME/.config/zsh/secrets.zsh
+        # install -m 600 で atomic に正しい権限で作成 (cp+chmod の race を回避)
+        run install -m 600 "${dotfilesDir}/.config/zsh/secrets.zsh.example" \
+                           "$HOME/.config/zsh/secrets.zsh"
+      fi
+      # 既存ファイルでも権限は常に 600 に矯正
+      run chmod 600 "$HOME/.config/zsh/secrets.zsh"
+
+      run mkdir -p "$HOME/.codex"
+      if [ ! -f "$HOME/.codex/config.toml" ]; then
+        run cp "${dotfilesDir}/.config/codex/config.toml" \
+               "$HOME/.codex/config.toml"
       fi
     '';
   };

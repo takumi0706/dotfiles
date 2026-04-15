@@ -111,8 +111,11 @@
 !/.claude/skills/**
 
 # agents (codex skills など複数AIツール共通の ~/.agents/skills/)
+# skills 配下のみホワイトリスト化 — 他のランタイム/状態ファイルが混入しないよう制限
 !/.agents/
-!/.agents/**
+/.agents/*
+!/.agents/skills/
+!/.agents/skills/**
 # Exclude local settings (machine-specific)
 /.claude/settings.local.json
 

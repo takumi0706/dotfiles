@@ -43,11 +43,13 @@ in
       # 既存ファイルでも権限は常に 600 に矯正
       run chmod 600 "$HOME/.config/zsh/secrets.zsh"
 
-      run mkdir -p "$HOME/.codex"
+      # codex は ~/.codex/auth.json に OAuth/APIキーを保存するため restrictive に作成
+      run install -d -m 700 "$HOME/.codex"
       if [ ! -f "$HOME/.codex/config.toml" ]; then
-        run cp "${dotfilesDir}/.config/codex/config.toml" \
-               "$HOME/.codex/config.toml"
+        run install -m 600 "${dotfilesDir}/.config/codex/config.toml" \
+                           "$HOME/.codex/config.toml"
       fi
+      run chmod 600 "$HOME/.codex/config.toml"
     '';
   };
 

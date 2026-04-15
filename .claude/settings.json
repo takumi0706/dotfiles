@@ -212,7 +212,16 @@
     "linear@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "playwright@claude-plugins-official": true,
-    "coderabbit@claude-plugins-official": true
+    "coderabbit@claude-plugins-official": true,
+    "dig@kuu-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "kuu-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "fumiya-kume/claude-code"
+      }
+    }
   },
   "language": "日本語",
   "skipDangerousModePermissionPrompt": true,

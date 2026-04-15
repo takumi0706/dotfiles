@@ -87,8 +87,12 @@
 # zsh
 !/.config/zsh/
 !/.config/zsh/**
+# codex
+!/.config/codex/
+!/.config/codex/config.toml
 # Exclude from whitelisted dirs above
 *.hm-backup
+/.config/zsh/secrets.zsh
 /.config/gh/hosts.yml
 /.config/git/config
 /.config/nvim/lazy-lock.json
@@ -105,6 +109,10 @@
 /.claude/hooks/__pycache__/
 !/.claude/skills/
 !/.claude/skills/**
+
+# agents (codex skills など複数AIツール共通の ~/.agents/skills/)
+!/.agents/
+!/.agents/**
 # Exclude local settings (machine-specific)
 /.claude/settings.local.json
 

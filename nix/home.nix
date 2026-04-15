@@ -24,7 +24,25 @@ in
       ripgrep
       jq
       nerd-fonts.jetbrains-mono
+      codex
     ];
+
+    # Codex は ~/.codex/ 固定 (XDG非準拠) なので home.file で配置
+    file.".codex/config.toml".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.config/codex/config.toml";
+
+    # Skills は ~/.agents/skills/ (複数AIツール共通の標準パス)
+    file.".agents/skills".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/.agents/skills";
+
+    # secrets.zsh が無ければテンプレから初回のみコピー (既存は絶対上書きしない)
+    activation.copySecretsTemplate = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if [ ! -f "$HOME/.config/zsh/secrets.zsh" ]; then
+        run cp ${dotfilesDir}/.config/zsh/secrets.zsh.example \
+               $HOME/.config/zsh/secrets.zsh
+        run chmod 600 $HOME/.config/zsh/secrets.zsh
+      fi
+    '';
   };
 
   # ------------------------------------------------------------------
@@ -90,6 +108,9 @@ in
     initContent = ''
       # ~/.local/bin (claude CLI etc.)
       [[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
+
+      # API keys / secrets (gitignored, copied from template on first switch)
+      [[ -f "$HOME/.config/zsh/secrets.zsh" ]] && source "$HOME/.config/zsh/secrets.zsh"
 
       # Package manager completions (npm/yarn/pnpm)
       [[ -f "$HOME/.config/zsh/completions.zsh" ]] && source "$HOME/.config/zsh/completions.zsh"

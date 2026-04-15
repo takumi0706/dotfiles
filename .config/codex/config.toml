@@ -1,0 +1,14 @@
+model = "gpt-5.4"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[profiles.chatgpt]
+preferred_auth_method = "chatgpt"
+
+[profiles.apikey]
+preferred_auth_method = "apikey"
+
+# --- MCP servers ---
+# [mcp_servers.context7]
+# command = "npx"
+# args = ["-y", "@upstash/context7-mcp"]

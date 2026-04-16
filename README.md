@@ -82,6 +82,34 @@ nvim / wezterm / starship / zsh の設定ファイルは `mkOutOfStoreSymlink` �
 
 Codex の `config.toml` は dotfiles 側のファイルが「初期テンプレ」として `~/.codex/config.toml` にコピーされます (Codex 自身が `[projects.*]` 等の実行時状態を書き込むため symlink にできない)。テンプレを更新して反映したい場合は `rm ~/.codex/config.toml && make switch` してください。
 
+## Neovim でのマージコンフリクト対応
+
+`git-conflict.nvim` と `diffview.nvim` を導入しており、以下の流れで解決できます:
+
+1. `<leader>gg` で LazyGit を開きマージ/リベースを開始
+2. コンフリクトしたファイルを開くとマーカーが自動でハイライトされる
+3. 行単位で解決する (カーソルをコンフリクトブロック内に置いて実行):
+
+   | キー | 動作 |
+   |------|------|
+   | `co` | 自分側 (ours / current) を採用 |
+   | `ct` | 相手側 (theirs / incoming) を採用 |
+   | `cb` | 両方採用 (both) |
+   | `c0` | どちらも破棄 (none) |
+   | `]x` / `[x` | 次/前のコンフリクトへ移動 |
+
+4. 文脈把握が必要な箇所は `<leader>gm` で 3-way マージビュー (`DiffviewOpen`) を開いて OURS/BASE/THEIRS を確認。`<leader>gq` で閉じる
+5. ファイル履歴を追う場合は `<leader>gh` (`DiffviewFileHistory`)
+
+補助的な Gitsigns のキーマップ (抜粋):
+
+| キー | 動作 |
+|------|------|
+| `]h` / `[h` | 次/前の hunk へ移動 |
+| `<leader>gs` / `<leader>gr` | hunk をステージ / リセット |
+| `<leader>gp` | hunk をプレビュー |
+| `<leader>gB` | 行の blame を表示 |
+
 ## API キー / シークレット
 
 `~/.config/zsh/secrets.zsh` に環境変数を export する形で管理します。

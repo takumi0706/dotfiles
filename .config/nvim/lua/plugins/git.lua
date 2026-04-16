@@ -119,4 +119,39 @@ return {
       { "<leader>gf", "<cmd>LazyGitCurrentFile<CR>", desc = "現在のファイルのLazyGit" },
     },
   },
+
+  -- git-conflict.nvim: コンフリクトマーカーのハイライトと選択操作
+  {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    event = "BufReadPre",
+    opts = {
+      default_mappings = true, -- co/ct/cb/c0 と ]x/[x を有効化
+      default_commands = true,
+      disable_diagnostics = true,
+      list_opener = "copen",
+      highlights = {
+        incoming = "DiffAdd",
+        current = "DiffText",
+      },
+    },
+  },
+
+  -- diffview.nvim: 3-way マージビューと差分ブラウザ
+  {
+    "sindrets/diffview.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    cmd = {
+      "DiffviewOpen",
+      "DiffviewClose",
+      "DiffviewToggleFiles",
+      "DiffviewFileHistory",
+    },
+    keys = {
+      { "<leader>gm", "<cmd>DiffviewOpen<CR>", desc = "マージビューを開く" },
+      { "<leader>gq", "<cmd>DiffviewClose<CR>", desc = "マージビューを閉じる" },
+      { "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", desc = "ファイル履歴" },
+    },
+    opts = {},
+  },
 }

@@ -26,6 +26,7 @@ in
       nerd-fonts.jetbrains-mono
       codex
       nodejs_22
+      corepack_22 # pnpm / yarn を各プロジェクトの packageManager の版で起動する
     ];
 
     # Skills は ~/.agents/skills/ (複数AIツール共通の標準パス)
